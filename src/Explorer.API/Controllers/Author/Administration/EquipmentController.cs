@@ -2,25 +2,29 @@
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
-namespace Explorer.API.Controllers.Author.Administration
+namespace Explorer.API.Controllers.Author.Administration;
+
+[Authorize(Policy = "authorPolicy")]
+[Route("api/manipulation/equipment")]
+public class EquipmentController : BaseApiController
 {
-    [Authorize(Policy = "authorPolicy")]
-    [Route("api/manipulation/equipment")]
-    public class EquipmentController : BaseApiController
+    private readonly HttpClient _httpClient;
+
+    public EquipmentController(IHttpClientFactory httpClientFactory)
     {
-        private readonly IEquipmentService _equipmentService;
+        _httpClient = httpClientFactory.CreateClient();
+        _httpClient.BaseAddress = new Uri("http://localhost:3000");
+    }
 
-        public EquipmentController(IEquipmentService equipmentService)
-        {
-            _equipmentService = equipmentService;
-        }
-
-        [HttpPost("get-available/{tourId:int}")]
-        public ActionResult<List<EquipmentDto>> GetAvailableEquipment([FromBody]List<long> currentEquipmentIds, int tourId)
-        {
-            var result = _equipmentService.GetAvailable(currentEquipmentIds, tourId);
-            return CreateResponse(result);
-        }
+    [HttpPost("get-available/{id:int}")]
+    public async Task<ActionResult<List<EquipmentDto>>> GetAvailableEquipment([FromBody] List<long> currentEquipmentIds, int id)
+    {
+        var response = await _httpClient.PostAsJsonAsync($"/equipment/get-available/{id}", currentEquipmentIds);
+        response.EnsureSuccessStatusCode();
+        var contentString = await response.Content.ReadAsStringAsync();
+        var result = JsonConvert.DeserializeObject<List<EquipmentDto>>(contentString);
+        return Ok(result);
     }
 }

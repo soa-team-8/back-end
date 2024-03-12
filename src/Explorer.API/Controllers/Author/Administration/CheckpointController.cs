@@ -117,18 +117,22 @@ public class CheckpointController : BaseApiController
 
     [HttpGet("{id:int}")]
     [Authorize(Policy = "authorPolicy")]
-    public ActionResult<List<CheckpointDto>> GetAllByTour([FromQuery] int page, [FromQuery] int pageSize, int id)
+    public async Task<ActionResult> GetAllByTour([FromQuery] int page, [FromQuery] int pageSize, int id)
     {
-        var result = _checkpointService.GetPagedByTour(page, pageSize, id);
-        return CreateResponse(result);
+        var response = await _httpClient.GetAsync($"/checkpoints/{id}/tour");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
     }
 
     [HttpGet("details/{id:int}")]
     [Authorize(Policy = "authorPolicy")]
-    public ActionResult<CheckpointDto> GetById(int id)
+    public async Task<ActionResult> GetById(int id)
     {
-        var result = _checkpointService.Get(id);
-        return CreateResponse(result);
+        var response = await _httpClient.GetAsync($"/checkpoints/{id}");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
     }
 
     [HttpPut("{id:int}")]
