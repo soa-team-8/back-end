@@ -109,9 +109,10 @@ public class TourController : BaseApiController
     }
 
     [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id)
+    public async Task<ActionResult> Delete(int id)
     {
-        var result = _tourService.Delete(id, User.PersonId());
-        return CreateResponse(result);
+        var response = await _httpClient.DeleteAsync($"/tours/{id}");
+        response.EnsureSuccessStatusCode();
+        return Ok(new { message = "Tour deleted successfully" });
     }
 }
