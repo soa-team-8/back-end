@@ -25,7 +25,6 @@ public class EquipmentController : BaseApiController
         return Ok(content);
     }
 
-
     [HttpGet]
     public async Task<ActionResult> GetAll()
     {
