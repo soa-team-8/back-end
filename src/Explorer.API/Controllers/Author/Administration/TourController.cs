@@ -87,20 +87,22 @@ public class TourController : BaseApiController
         return Ok(new { message = "Tour deleted successfully" });
     }
 
-    // TODO: call on back-end
-
     [HttpPut("publishedTours/{id:int}")]
-    public ActionResult<TourDto> Publish(int id)
+    public async Task<ActionResult> Publish(int id)
     {
-        var result = _tourService.Publish(id, User.PersonId());
-        return CreateResponse(result);
+        var response = await _httpClient.PutAsync($"/tours/{id}/publish", null);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
     }
 
     [HttpPut("archivedTours/{id:int}")]
-    public ActionResult<TourDto> Archive(int id)
+    public async Task<ActionResult> Archive(int id)
     {
-        var result = _tourService.Archive(id, User.PersonId());
-        return CreateResponse(result);
+        var response = await _httpClient.PutAsync($"/tours/{id}/archive", null);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
     }
 
     [HttpPut("tourTime/{id:int}")]
