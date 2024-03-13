@@ -27,6 +27,7 @@ public static class ToursStartup
         services.AddAutoMapper(typeof(ToursProfile).Assembly);
         SetupCore(services);
         SetupInfrastructure(services);
+        services.AddHttpClient();
         return services;
     }
 

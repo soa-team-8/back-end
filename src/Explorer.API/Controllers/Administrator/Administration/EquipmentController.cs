@@ -1,50 +1,63 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Administration;
+﻿using Explorer.Tours.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Explorer.API.Controllers.Administrator.Administration
+namespace Explorer.API.Controllers.Administrator.Administration;
+
+[Authorize(Policy = "administratorPolicy")]
+[Route("api/administration/equipment")]
+public class EquipmentController : BaseApiController
 {
-    [Authorize(Policy = "administratorPolicy")]
-    [Route("api/administration/equipment")]
-    public class EquipmentController : BaseApiController
+    private readonly HttpClient _httpClient;
+
+    public EquipmentController(IHttpClientFactory httpClientFactory)
     {
-        private readonly IEquipmentService _equipmentService;
+        _httpClient = httpClientFactory.CreateClient();
+        _httpClient.BaseAddress = new Uri("http://localhost:3000");
+    }
 
-        public EquipmentController(IEquipmentService equipmentService)
-        {
-            _equipmentService = equipmentService;
-        }
+    [HttpGet("paged")]
+    public async Task<ActionResult> GetAllPaged([FromQuery] int page, [FromQuery] int pageSize)
+    {
+        var response = await _httpClient.GetAsync($"/equipment/paged?page={page}&pageSize={pageSize}");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
+    }
 
-        [HttpGet]
-        //[Authorize(Policy = "administratorPolicy")]
-        //[Authorize(Policy = "authorPolicy")]
-        public ActionResult<PagedResult<EquipmentDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
-        {
-            var result = _equipmentService.GetPaged(page, pageSize);
-            return CreateResponse(result);
-        }
+    [HttpGet]
+    public async Task<ActionResult> GetAll()
+    {
+        var response = await _httpClient.GetAsync("/equipment");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
+    }
 
-        [HttpPost]
-        public ActionResult<EquipmentDto> Create([FromBody] EquipmentDto equipment)
-        {
-            var result = _equipmentService.Create(equipment);
-            return CreateResponse(result);
-        }
+    [HttpPost]
+    public async Task<ActionResult> Create([FromBody] EquipmentDto equipment)
+    {
+        var response = await _httpClient.PostAsJsonAsync("/equipment", equipment);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
+    }
 
-        [HttpPut("{id:int}")]
-        public ActionResult<EquipmentDto> Update([FromBody] EquipmentDto equipment)
-        {
-            var result = _equipmentService.Update(equipment);
-            return CreateResponse(result);
-        }
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult> Update(int id, [FromBody] EquipmentDto equipment)
+    {
+        var response = await _httpClient.PutAsJsonAsync($"/equipment/{id}", equipment);
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
+    }
 
-        [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
-        {
-            var result = _equipmentService.Delete(id);
-            return CreateResponse(result);
-        }
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        var response = await _httpClient.DeleteAsync($"/equipment/{id}");
+        response.EnsureSuccessStatusCode();
+        var content = await response.Content.ReadAsStringAsync();
+        return Ok(content);
     }
 }
