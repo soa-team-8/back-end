@@ -31,7 +31,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
         [HttpGet]
         public async Task<ActionResult<PagedResult<EncounterRequestDto>>> GetAll()
         {
-            using HttpResponseMessage response = await Client.GetAsync("http://localhost:3000/encounters/tourist/requests/");
+            using HttpResponseMessage response = await Client.GetAsync("http://localhost:3000/requests/getAll");
             var jsonResponse = await response.Content.ReadAsStringAsync();
             return CreateResponse(jsonResponse.ToResult());
         }
@@ -39,7 +39,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
         [HttpPut("accept/{id:int}")]
         public async Task<ActionResult<EncounterRequestDto>> AcceptRequest(int id)
         {
-            using HttpResponseMessage response = await Client.PutAsync($"http://localhost:3000/encounters/tourist/acceptReq/{id}", null);
+            using HttpResponseMessage response = await Client.PutAsync($"http://localhost:3000/requests/acceptReq/{id}", null);
             var jsonResponse = await response.Content.ReadAsStringAsync();
             return CreateResponse(jsonResponse.ToResult());
         }
@@ -47,7 +47,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
         [HttpPut("reject/{id:int}")]
         public async Task<ActionResult<EncounterRequestDto>> RejectRequest(int id)
         {
-            using HttpResponseMessage response = await Client.PutAsync($"http://localhost:3000/encounters/tourist/rejectReq/{id}", null);
+            using HttpResponseMessage response = await Client.PutAsync($"http://localhost:3000/requests/rejectReq/{id}", null);
             var jsonResponse = await response.Content.ReadAsStringAsync();
             return CreateResponse(jsonResponse.ToResult());
         }
