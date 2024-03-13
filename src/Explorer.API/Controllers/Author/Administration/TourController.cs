@@ -90,7 +90,7 @@ public class TourController : BaseApiController
     [HttpPut("publishedTours/{id:int}")]
     public async Task<ActionResult> Publish(int id)
     {
-        var response = await _httpClient.PutAsync($"/tours/{id}/publish", null);
+        var response = await _httpClient.PutAsync($"/tours/publish/{id}", null);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
         return Ok(content);
@@ -99,7 +99,7 @@ public class TourController : BaseApiController
     [HttpPut("archivedTours/{id:int}")]
     public async Task<ActionResult> Archive(int id)
     {
-        var response = await _httpClient.PutAsync($"/tours/{id}/archive", null);
+        var response = await _httpClient.PutAsync($"/tours/archive/{id}", null);
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
         return Ok(content);
