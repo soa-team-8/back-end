@@ -21,7 +21,7 @@ public class EquipmentController : BaseApiController
     [HttpPost("get-available/{id:int}")]
     public async Task<ActionResult<List<EquipmentDto>>> GetAvailableEquipment([FromBody] List<long> currentEquipmentIds, int id)
     {
-        var response = await _httpClient.PostAsJsonAsync($"/equipment/get-available/{id}", currentEquipmentIds);
+        var response = await _httpClient.PostAsJsonAsync($"/equipment/{id}/get-available", currentEquipmentIds);
         response.EnsureSuccessStatusCode();
         var contentString = await response.Content.ReadAsStringAsync();
         var result = JsonConvert.DeserializeObject<List<EquipmentDto>>(contentString);
