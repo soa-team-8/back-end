@@ -79,6 +79,16 @@ public class TourController : BaseApiController
         return Ok(content);
     }
 
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        var response = await _httpClient.DeleteAsync($"/tours/{id}");
+        response.EnsureSuccessStatusCode();
+        return Ok(new { message = "Tour deleted successfully" });
+    }
+
+    // TODO: call on back-end
+
     [HttpPut("publishedTours/{id:int}")]
     public ActionResult<TourDto> Publish(int id)
     {
@@ -106,13 +116,5 @@ public class TourController : BaseApiController
         tour.Equipment = new List<EquipmentDto>();
         var result = _tourService.Update(tour, User.PersonId());
         return CreateResponse(result);
-    }
-
-    [HttpDelete("{id:int}")]
-    public async Task<ActionResult> Delete(int id)
-    {
-        var response = await _httpClient.DeleteAsync($"/tours/{id}");
-        response.EnsureSuccessStatusCode();
-        return Ok(new { message = "Tour deleted successfully" });
     }
 }
