@@ -12,6 +12,7 @@ using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI;
+using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
@@ -39,27 +40,30 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         [Authorize(Policy = "touristPolicy")]
         public async Task<ActionResult<EncounterDto>> Create([FromForm] EncounterDto encounter, [FromQuery] long checkpointId, [FromQuery] bool isSecretPrerequisite, [FromForm] List<IFormFile>? imageF = null)
         {
+            using var formData = new MultipartFormDataContent();
+            var jsonContent = new StringContent(JsonSerializer.Serialize(encounter));
+            formData.Add(jsonContent, "encounter");
 
-
-            /* if (imageF != null && imageF.Any())
-             {
-                 var imageNames = _imageService.UploadImages(imageF);
-                 if (encounter.Type == "Location")
-                     encounter.Image = imageNames[0];
-             }
-
-             // Transformacija koordinata za longitude
-             encounter.Longitude = TransformisiKoordinatu(encounter.Longitude);
-
-             // Transformacija koordinata za latitude
-             encounter.Latitude = TransformisiKoordinatu(encounter.Latitude);
-
-             encounter.Status = "Draft";
-             var result = _encounterService.CreateForTourist(encounter, checkpointId, isSecretPrerequisite, User.PersonId());
-             return CreateResponse(result);*/
-            using StringContent jsonContent = new(JsonSerializer.Serialize(encounter), Encoding.UTF8, "application/json");
-            using HttpResponseMessage response = await Client.PostAsync($"http://localhost:3000/encounters/tourist/{checkpointId}/{isSecretPrerequisite}/{_touristService.GetTouristById(User.PersonId()).Value.Level}/{User.PersonId()}", jsonContent);
+            // Dodajte slike u multipart form data
+            if (imageF != null && imageF.Any())
+            {
+                foreach (var imageFile in imageF)
+                {
+                    var imageStream = imageFile.OpenReadStream();
+                    var imageContent = new StreamContent(imageStream);
+                    formData.Add(imageContent, "pictures", imageFile.FileName);
+                }
+            }
+            
+            var response = await Client.PostAsync($"http://localhost:3000/encounters/tourist/{_touristService.GetTouristById(User.PersonId()).Value.Level}/{User.PersonId()}", formData);
             var jsonResponse = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var encId = (int)JObject.Parse(jsonResponse)["id"];
+                response = await Client.PutAsync($"http://localhost:3000/checkpoints/setEnc/{checkpointId}/{encId}/{isSecretPrerequisite}/{encounter.AuthorId}", formData);
+            }
+
+            jsonResponse = await response.Content.ReadAsStringAsync();
             return CreateResponse(jsonResponse.ToResult());
         }
 
