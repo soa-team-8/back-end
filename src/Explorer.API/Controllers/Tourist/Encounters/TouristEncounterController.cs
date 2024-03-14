@@ -39,10 +39,10 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             }
 
             // Transformacija koordinata za longitude
-            encounter.Longitude = TransformisiKoordinatu(encounter.Longitude);
+            //encounter.Longitude = TransformisiKoordinatu(encounter.Longitude);
 
             // Transformacija koordinata za latitude
-            encounter.Latitude = TransformisiKoordinatu(encounter.Latitude);
+            //encounter.Latitude = TransformisiKoordinatu(encounter.Latitude);
 
             encounter.Status = "Draft";
             var result = _encounterService.CreateForTourist(encounter, checkpointId, isSecretPrerequisite, User.PersonId());
