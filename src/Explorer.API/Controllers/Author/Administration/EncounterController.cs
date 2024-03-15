@@ -3,6 +3,7 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using FluentResults;
@@ -50,12 +51,12 @@ namespace Explorer.API.Controllers.Author.Administration
                 }
             }
 
-            var response = await Client.PostAsync($"http://localhost:3000/encounters/author", formData);
+            var response = await Client.PostAsync($"http://localhost:3000/encounters/author", formData);;
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                var encId = (int)JObject.Parse(jsonResponse)["id"];
-                response = await Client.PutAsync($"http://localhost:3000/checkpoints/setEnc/{checkpointId}/{encId}/{isSecretPrerequisite}/{encounter.AuthorId}", formData);
+                var encId = (long)JObject.Parse(jsonResponse)["id"];
+                response = await Client.PutAsync($"http://localhost:3000/checkpoints/setEnc/{checkpointId}/{encId}/{isSecretPrerequisite}", null);
             }
 
             jsonResponse = await response.Content.ReadAsStringAsync();

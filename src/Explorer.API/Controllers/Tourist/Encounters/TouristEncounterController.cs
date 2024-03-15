@@ -59,8 +59,8 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                var encId = (int)JObject.Parse(jsonResponse)["id"];
-                response = await Client.PutAsync($"http://localhost:3000/checkpoints/setEnc/{checkpointId}/{encId}/{isSecretPrerequisite}/{encounter.AuthorId}", formData);
+                var encId = (long)JObject.Parse(jsonResponse)["id"];
+                response = await Client.PutAsync($"http://localhost:3000/checkpoints/setEnc/{checkpointId}/{encId}/{isSecretPrerequisite}", null);
             }
 
             jsonResponse = await response.Content.ReadAsStringAsync();
