@@ -1,6 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,18 +9,21 @@ namespace Explorer.API.Controllers.Author
     [Route("api/author/tour-rating")]
     public class TourRatingAuthorController : BaseApiController
     {
-        private readonly ITourRatingService _tourRatingService;
+        private readonly HttpClient _httpClient;
 
-        public TourRatingAuthorController(ITourRatingService tourRatingService)
+        public TourRatingAuthorController(IHttpClientFactory httpClientFactory)
         {
-            _tourRatingService = tourRatingService;
+            _httpClient = httpClientFactory.CreateClient();
+            _httpClient.BaseAddress = new Uri("http://localhost:3000");
         }
 
         [HttpGet]
-        public ActionResult<PagedResult<TourRatingDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<ActionResult<PagedResult<TourRatingDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _tourRatingService.GetPaged(page, pageSize);
-            return CreateResponse(result);
+            var response = await _httpClient.GetAsync("/tour-ratings");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            return Ok(content);
         }
     }
 }
