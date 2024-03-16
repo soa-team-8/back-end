@@ -15,6 +15,7 @@ namespace Explorer.API.Controllers.Tourist.Tour
     public class TourExecutionController : BaseApiController
     {
         private readonly HttpClient _httpClient;
+
         private readonly ITourExecutionService _tourExecutionService;
         private readonly ITourRecommendationService _tourRecommendationService;
         private readonly IEmailService _emailService;
@@ -35,13 +36,11 @@ namespace Explorer.API.Controllers.Tourist.Tour
         [HttpPost("{tourId:int}")]
         public async Task<ActionResult<TourExecutionDto>> Create(long tourId)
         {
-            var response = await _httpClient.PostAsync($"/tour-executions/{1}/{tourId}", null); // Send a POST request to the Go microservice
+            var response = await _httpClient.PostAsync($"/tour-executions/{1}/{tourId}", null);
             response.EnsureSuccessStatusCode();
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<TourExecutionDto>(jsonResponse);
             return Ok(result);
-            //var result = _tourExecutionService.Create(User.PersonId(), tourId);
-            //return CreateResponse(result);
         }
 
         [HttpPut("{id:int}")]
@@ -54,32 +53,26 @@ namespace Explorer.API.Controllers.Tourist.Tour
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<TourExecutionDto>(jsonResponse);
             return Ok(result);
-            //var result = _tourExecutionService.CheckPosition(touristPosition, id);
-            //return CreateResponse(result);
         }
 
         [HttpGet]
         public async Task<ActionResult<TourExecutionDto>> Get([FromQuery] long tourId)
         {
-            var response = await _httpClient.GetAsync($"/tour-executions/{1}/{tourId}"); // Send a GET request to the Go microservice
+            var response = await _httpClient.GetAsync($"/tour-executions/{1}/{tourId}");
             response.EnsureSuccessStatusCode();
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<TourExecutionDto>(jsonResponse);
             return Ok(result);
-            //var result = _tourExecutionService.GetInProgressByTourAndTourist(tourId, User.PersonId());
-            //return CreateResponse(result);
         }
 
         [HttpPut("abandoned")]
         public async Task<ActionResult<TourExecutionDto>> Abandon([FromBody] long id)
         {
-            var response = await _httpClient.PutAsync($"/tour-executions/{1}/{id}", null); // Send a PUT request to the Go microservice
+            var response = await _httpClient.PutAsync($"/tour-executions/{1}/{id}", null);
             response.EnsureSuccessStatusCode();
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<TourExecutionDto>(jsonResponse);
             return Ok(result);
-            //var result = _tourExecutionService.Abandon(id, User.PersonId());
-            //return CreateResponse(result);
         }
 
         [HttpGet("get-suggested-tours/{id:int}")]

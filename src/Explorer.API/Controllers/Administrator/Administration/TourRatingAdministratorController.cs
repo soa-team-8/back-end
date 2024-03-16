@@ -1,7 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,25 +9,30 @@ namespace Explorer.API.Controllers.Administrator.Administration
     [Route("api/administration/tour-rating")]
     public class TourRatingAdministratorController : BaseApiController
     {
-        private readonly ITourRatingService _tourRatingService;
+        private readonly HttpClient _httpClient;
 
-        public TourRatingAdministratorController(ITourRatingService tourRatingService)
+        public TourRatingAdministratorController(IHttpClientFactory httpClientFactory)
         {
-            _tourRatingService = tourRatingService;
+            _httpClient = httpClientFactory.CreateClient();
+            _httpClient.BaseAddress = new Uri("http://localhost:3000");
         }
 
         [HttpGet]
-        public ActionResult<PagedResult<TourRatingDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<ActionResult<PagedResult<TourRatingDto>>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _tourRatingService.GetPaged(page, pageSize);
-            return CreateResponse(result);
+            var response = await _httpClient.GetAsync("/tour-ratings");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            return Ok(content);
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var result = _tourRatingService.Delete(id);
-            return CreateResponse(result);
+            var response = await _httpClient.DeleteAsync($"/tour-ratings/{id}");
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadAsStringAsync();
+            return Ok(content);
         }
     }
 }
