@@ -34,12 +34,12 @@ namespace Explorer.API.Controllers.Tourist.Tour
         }
 
         [HttpGet("details/{id:int}")]
-        public async Task<ActionResult<List<TourPreviewDto>>> GetPublishedTour(int id)
+        public async Task<ActionResult<TourPreviewDto>> GetPublishedTour(int id)
         {
             var response = await _httpClient.GetAsync($"/published-tours/{id}");
             response.EnsureSuccessStatusCode();
             var contentString = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<List<TourPreviewDto>>($"[{contentString}]");
+            var result = JsonConvert.DeserializeObject<TourPreviewDto>(contentString);
             return Ok(result);
         }
 

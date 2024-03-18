@@ -31,12 +31,10 @@ namespace Explorer.API.Controllers.Tourist.Tour
             _httpClient.BaseAddress = new Uri("http://localhost:3000");
         }
 
-        // 1 = User.PersonId()
-
         [HttpPost("{tourId:int}")]
         public async Task<ActionResult<TourExecutionDto>> Create(long tourId)
         {
-            var response = await _httpClient.PostAsync($"/tour-executions/{1}/{tourId}", null);
+            var response = await _httpClient.PostAsync($"/tour-executions/{User.PersonId()}/{tourId}", null);
             response.EnsureSuccessStatusCode();
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<TourExecutionDto>(jsonResponse);
@@ -58,7 +56,7 @@ namespace Explorer.API.Controllers.Tourist.Tour
         [HttpGet]
         public async Task<ActionResult<TourExecutionDto>> Get([FromQuery] long tourId)
         {
-            var response = await _httpClient.GetAsync($"/tour-executions/{1}/{tourId}");
+            var response = await _httpClient.GetAsync($"/tour-executions/{User.PersonId()}/{tourId}");
             response.EnsureSuccessStatusCode();
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<TourExecutionDto>(jsonResponse);
@@ -68,7 +66,7 @@ namespace Explorer.API.Controllers.Tourist.Tour
         [HttpPut("abandoned")]
         public async Task<ActionResult<TourExecutionDto>> Abandon([FromBody] long id)
         {
-            var response = await _httpClient.PutAsync($"/tour-executions/{1}/{id}", null);
+            var response = await _httpClient.PutAsync($"/tour-executions/{User.PersonId()}/{id}", null);
             response.EnsureSuccessStatusCode();
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<TourExecutionDto>(jsonResponse);
