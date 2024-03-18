@@ -93,10 +93,11 @@ namespace Explorer.API.Controllers.Tourist.Encounters
 
         [HttpGet]
         [Authorize(Policy = "administratorPolicy")]
-        public ActionResult<PagedResult<EncounterDto>> GetAll()
+        public async Task<ActionResult<PagedResult<EncounterDto>>> GetAll()
         {
-            var result = _encounterService.GetPaged(0, 0);
-            return CreateResponse(result);
+            using HttpResponseMessage response = await Client.GetAsync("http://localhost:3000/encounters/get-all");
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return CreateResponse(jsonResponse.ToResult());
         }
 
         [HttpGet("{id:int}")]
