@@ -55,13 +55,14 @@ namespace Explorer.API.Controllers.Tourist.Encounters
                 }
             }
             
-            var response = await Client.PostAsync($"http://localhost:3000/encounters/tourist/{_touristService.GetTouristById(User.PersonId()).Value.Level}/{User.PersonId()}", formData);
+            var response = await Client.PostAsync($"http://localhost:3030/encounters/tourist/{_touristService.GetTouristById(User.PersonId()).Value.Level}/{User.PersonId()}", formData);
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
                 var encId = (long)JObject.Parse(jsonResponse)["id"];
                 response = await Client.PutAsync($"http://localhost:3000/checkpoints/setEnc/{checkpointId}/{encId}/{isSecretPrerequisite}", null);
             }
+
 
             jsonResponse = await response.Content.ReadAsStringAsync();
             return CreateResponse(jsonResponse.ToResult());

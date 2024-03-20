@@ -29,5 +29,13 @@ namespace Explorer.Stakeholders.Core.UseCases
             return MapToDto(_touristRepository.Get(touristId));
         }
 
+        public Result<TouristDto> UpdateTouristXpAndLevel(long touristId, int encounterXp)
+        {
+            Tourist tourist = _touristRepository.GetTouristByUserId(touristId);
+            tourist.UpdateXpAndLevel(encounterXp);
+            var result = _touristRepository.Update(tourist);
+            return MapToDto(result);
+        }
+
     }
 }
