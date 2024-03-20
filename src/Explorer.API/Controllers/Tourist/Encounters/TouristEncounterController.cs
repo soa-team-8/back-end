@@ -2,21 +2,14 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
-using Explorer.Encounters.Core.UseCases;
 using Explorer.Stakeholders.API.Public;
-using Explorer.Stakeholders.Core.Domain;
-using Explorer.Stakeholders.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Authentication;
-using Explorer.Tours.API.Dtos;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MySqlX.XDevAPI;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
-using System.Text;
 using System.Text.Json;
-using static Mysqlx.Notice.Warning.Types;
 
 namespace Explorer.API.Controllers.Tourist.Encounters
 {

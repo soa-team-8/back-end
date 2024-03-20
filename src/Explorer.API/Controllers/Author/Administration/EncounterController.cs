@@ -1,23 +1,11 @@
 ﻿using Explorer.API.Services;
-using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
-using Explorer.Stakeholders.API.Public;
-using Explorer.Stakeholders.Core.UseCases;
-using Explorer.Stakeholders.Infrastructure.Authentication;
-using Explorer.Tours.API.Dtos;
 using FluentResults;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-using System.Text;
-using FluentResults;
-using Explorer.Encounters.Core.Domain.Encounters;
-using System.Net.Http.Json;
-using System.Net;
-using System.Diagnostics.Metrics;
-using Explorer.Stakeholders.API.Public;
 using Newtonsoft.Json.Linq;
+using System.Net;
+using System.Text;
 using System.Text.Json;
 
 namespace Explorer.API.Controllers.Author.Administration
