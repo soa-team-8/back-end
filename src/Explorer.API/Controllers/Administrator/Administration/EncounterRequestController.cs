@@ -1,8 +1,11 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
+using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
+using System.Text.Json;
 
 namespace Explorer.API.Controllers.Administrator.Administration
 {
@@ -11,6 +14,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
     public class EncounterRequestController : BaseApiController
     {
         private readonly IEncounterRequestService _encounterRequestService;
+        private readonly HttpClient Client = new HttpClient();
 
         public EncounterRequestController(IEncounterRequestService encounterRequestService)
         {
@@ -25,24 +29,27 @@ namespace Explorer.API.Controllers.Administrator.Administration
         }
 
         [HttpGet]
-        public ActionResult<PagedResult<EncounterRequestDto>> GetAll()
+        public async Task<ActionResult<PagedResult<EncounterRequestDto>>> GetAll()
         {
-            var result = _encounterRequestService.GetPaged(0,0);
-            return CreateResponse(result);
+            using HttpResponseMessage response = await Client.GetAsync("http://localhost:3000/requests/getAll");
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return CreateResponse(jsonResponse.ToResult());
         }
 
         [HttpPut("accept/{id:int}")]
-        public ActionResult<EncounterRequestDto> AcceptRequest(int id)
+        public async Task<ActionResult<EncounterRequestDto>> AcceptRequest(int id)
         {
-            var result = _encounterRequestService.AcceptRequest(id);
-            return CreateResponse(result);
+            using HttpResponseMessage response = await Client.PutAsync($"http://localhost:3000/requests/acceptReq/{id}", null);
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return CreateResponse(jsonResponse.ToResult());
         }
 
         [HttpPut("reject/{id:int}")]
-        public ActionResult<EncounterRequestDto> RejectRequest(int id)
+        public async Task<ActionResult<EncounterRequestDto>> RejectRequest(int id)
         {
-            var result = _encounterRequestService.RejectRequest(id);
-            return CreateResponse(result);
+            using HttpResponseMessage response = await Client.PutAsync($"http://localhost:3000/requests/rejectReq/{id}", null);
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            return CreateResponse(jsonResponse.ToResult());
         }
 
     }

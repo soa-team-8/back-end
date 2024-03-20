@@ -143,28 +143,28 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
 
         }
-            public Result<CheckpointDto> CreateChechpointSecreat(CheckpointSecretDto secret, int id, int userId)
-            {
-                try
-                {
-                 Checkpoint checkpoint = _checkpointRepository.Get(id);
-                if (!checkpoint.IsAuthor(userId))
-                    return Result.Fail(FailureCode.InvalidArgument).WithError("Not checkpoint author");
-                    checkpoint.CreateCheckpointSecret(secret.Description, secret.Pictures);
-                    var result = CrudRepository.Update(checkpoint);
-                    return MapToDto(result);
-                }
-                catch (ArgumentException e)
-                {
-                    return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
-                }
-            }
-
-            public Result<CheckpointDto> UpdateChechpointSecreat(CheckpointSecretDto secret, int id, int userId)
-            {
+        public Result<CheckpointDto> CreateChechpointSecreat(CheckpointSecretDto secret, int id, int userId)
+        {
             try
             {
-                Checkpoint checkpoint = _checkpointRepository.Get(id);
+             Checkpoint checkpoint = _checkpointRepository.Get(id);
+            if (!checkpoint.IsAuthor(userId))
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Not checkpoint author");
+                checkpoint.CreateCheckpointSecret(secret.Description, secret.Pictures);
+                var result = CrudRepository.Update(checkpoint);
+                return MapToDto(result);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result<CheckpointDto> UpdateCheckpointSecret(CheckpointSecretDto secret, int id, int userId)
+        {
+            try
+            {
+                var checkpoint = _checkpointRepository.Get(id);
                 if (!checkpoint.IsAuthor(userId))
                     return Result.Fail(FailureCode.InvalidArgument).WithError("Not checkpoint author");
 
@@ -174,7 +174,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
-            }
+        }
 
             public Result<CheckpointDto> Get(int id)
             {
