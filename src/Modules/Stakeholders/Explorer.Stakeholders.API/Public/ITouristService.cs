@@ -11,5 +11,6 @@ namespace Explorer.Stakeholders.API.Public
     public interface ITouristService
     {
         Result<TouristDto> GetTouristById(long touristId);
+        Result<TouristDto> UpdateTouristXpAndLevel(long touristId, int encounterXp);
     }
 }

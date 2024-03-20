@@ -7,6 +7,5 @@
         public EncounterDto EncounterDto { get; set; }
         public long TouristId { get; set; }
         public string Status { get; set; }
-        public DateTime StartTime { get; set; }
     }
 }
