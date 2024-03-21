@@ -4,6 +4,8 @@ using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
@@ -11,25 +13,36 @@ namespace Explorer.API.Controllers.Author.Administration
     [Route("api/author/reported-issue-response")]
     public class ReportedIssueRespondingController : BaseApiController
     {
-        private readonly IReportingIssueService _reportingIssueService;
+        private readonly HttpClient _httpClient;
 
-        public ReportedIssueRespondingController(IReportingIssueService reportingIssueService)
+        public ReportedIssueRespondingController(IHttpClientFactory httpClientFactory)
         {
-            _reportingIssueService = reportingIssueService;
+            _httpClient = httpClientFactory.CreateClient();
+            _httpClient.BaseAddress = new Uri("http://localhost:3000");
         }
 
         [HttpPost("response/{id:int}")]
-        public ActionResult<ReportedIssueDto> Respond([FromBody] ReportedIssueCommentDto ric, int id)
+        public async Task<ActionResult<ReportedIssueDto>> Respond([FromBody] ReportedIssueCommentDto ric, int id)
         {
-            var result = _reportingIssueService.AddComment(id, ric);
-            return CreateResponse(result);
+            var json = JsonConvert.SerializeObject(ric);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync($"/reported-issues/{id}/comment", content);
+            response.EnsureSuccessStatusCode();
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ReportedIssueDto>(responseContent);
+            return Ok(result);
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<PagedResult<ReportedIssueDto>> GetAllByAuthor(int id, [FromQuery] int page, [FromQuery] int pageSize)
+        public async Task<ActionResult<PagedResult<ReportedIssueDto>>> GetAllByAuthor(int id, [FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _reportingIssueService.GetPagedByAuthor(id, page, pageSize);
-            return CreateResponse(result);
+            var response = await _httpClient.GetAsync($"/reported-issues/{id}/author");
+            response.EnsureSuccessStatusCode();
+            var contentString = await response.Content.ReadAsStringAsync();
+            
+            var result = JsonConvert.DeserializeObject<PagedResult<ReportedIssueDto>>($"{{\"items\": {contentString}}}");
+            return Ok(result);
         }
     }
 }
