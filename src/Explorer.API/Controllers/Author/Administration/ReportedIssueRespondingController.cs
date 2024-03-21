@@ -40,7 +40,8 @@ namespace Explorer.API.Controllers.Author.Administration
             var response = await _httpClient.GetAsync($"/reported-issues/{id}/author");
             response.EnsureSuccessStatusCode();
             var contentString = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<PagedResult<ReportedIssueDto>>(contentString);
+            
+            var result = JsonConvert.DeserializeObject<PagedResult<ReportedIssueDto>>($"{{\"items\": {contentString}}}");
             return Ok(result);
         }
     }

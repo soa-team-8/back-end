@@ -69,9 +69,9 @@ namespace Explorer.API.Controllers.Tourist
             response.EnsureSuccessStatusCode();
 
             var responseContent = await response.Content.ReadAsStringAsync();
-            //var result = JsonConvert.DeserializeObject<PagedResult<ReportedIssueDto>>(responseContent);
-
-            return Ok(responseContent);
+            
+            var result = JsonConvert.DeserializeObject<PagedResult<ReportedIssueDto>>($"{{\"items\": {responseContent}}}");
+            return Ok(result);
         }
     }
 }

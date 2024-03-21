@@ -29,7 +29,8 @@ namespace Explorer.API.Controllers.Administrator.Administration
             var response = await _httpClient.GetAsync($"/reported-issues");
             response.EnsureSuccessStatusCode();
             var contentString = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<PagedResult<ReportedIssueDto>>(contentString);
+
+            var result = JsonConvert.DeserializeObject<PagedResult<ReportedIssueDto>>($"{{\"items\": {contentString}}}");
             return Ok(result);
         }
 

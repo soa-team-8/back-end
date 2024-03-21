@@ -2,6 +2,7 @@
 using Explorer.Tours.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Explorer.API.Controllers.Administrator.Administration
 {
@@ -23,7 +24,9 @@ namespace Explorer.API.Controllers.Administrator.Administration
             var response = await _httpClient.GetAsync("/tour-ratings");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            return Ok(content);
+
+            var result = JsonConvert.DeserializeObject<PagedResult<TourRatingDto>>($"{{\"items\": {content}}}");
+            return Ok(result);
         }
 
         [HttpDelete("{id:int}")]
