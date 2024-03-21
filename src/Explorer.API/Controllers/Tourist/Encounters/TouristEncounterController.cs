@@ -89,7 +89,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         [Authorize(Policy = "administratorPolicy")]
         public async Task<ActionResult<PagedResult<EncounterDto>>> GetAll()
         {
-            using HttpResponseMessage response = await Client.GetAsync("http://localhost:3000/encounters/get-all");
+            using HttpResponseMessage response = await Client.GetAsync("http://localhost:3030/encounters/get-all");
             var jsonResponse = await response.Content.ReadAsStringAsync();
             return CreateResponse(jsonResponse.ToResult());
         }
