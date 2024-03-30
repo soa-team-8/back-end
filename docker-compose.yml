@@ -20,7 +20,7 @@ services:
     depends_on:
       - database
   database:
-    image: postgres:13
+    image: postgres
     restart: always
     networks:
       - database

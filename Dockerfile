@@ -32,7 +32,7 @@ ENV DATABASE_USERNAME=""
 
 ENV STAKEHOLDERS_TARGET_PROJECT=Explorer.Stakeholders.Infrastructure
 
-ENV TOURS_TARGET_PROJECT=Explorer.Tours.Infrastructure
+ENV PAYMENTS_TARGET_PROJECT=Explorer.Payments.Infrastructure
 
 ENV BLOG_TARGET_PROJECT=Explorer.Blog.Infrastructure
 
@@ -50,12 +50,12 @@ CMD PATH="$PATH:/root/.dotnet/tools" \
         --configuration Release && \
     dotnet-ef migrations add "${MIGRATION}-payments" \
         -s "${STARTUP_PROJECT}/${STARTUP_PROJECT}.csproj" \
-        -p "Modules/Payments/${PAYMENTS_TARGET_PROJECT}/${PAYMENTS_TARGET_PROJECT}.csproj" \
+        -p "Modules/Payments/Explorer.Payments.Infrastructure/Explorer.Payments.Infrastructure.csproj" \
         -c "PaymentsContext" \
         --configuration Release && \  
     dotnet-ef database update "${MIGRATION}-payments" \
         -s "${STARTUP_PROJECT}/${STARTUP_PROJECT}.csproj" \
-        -p "Modules/Payments/${PAYMENTS_TARGET_PROJECT}/${PAYMENTS_TARGET_PROJECT}.csproj" \
+        -p "Modules/Payments/Explorer.Payments.Infrastructure/Explorer.Payments.Infrastructure.csproj" \
         -c "PaymentsContext" \
         --configuration Release && \
     dotnet-ef migrations add "${MIGRATION}-blog" \
