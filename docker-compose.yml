@@ -1,0 +1,118 @@
+version: '3.9'
+
+services:
+  explorer:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: final
+    restart: on-failure
+    networks:
+      - database
+    ports:
+      - "44333:80"
+    environment:
+      DATABASE_HOST: database
+      DATABASE_PORT: 5432
+      DATABASE_PASSWORD: super
+      DATABASE_USER: postgres
+      DATABASE_SCHEMA: explorer-v1
+    depends_on:
+      - database
+  database:
+    image: postgres:13
+    restart: always
+    networks:
+      - database
+    environment:
+      POSTGRES_PASSWORD: super
+      POSTGRES_USER: postgres
+      POSTGRES_DB: explorer-v1
+    volumes:
+      - type: volume
+        source: database-data
+        target: /var/lib/postgresql/data
+      - type: bind
+        source: explorer-init-data.sql
+        target: /tmp/explorer-init.sql
+    ports:
+      - "5432:5432"
+  
+  tours-api:
+    build:
+      context: ../soa-tourism-explorer/tours-api
+      dockerfile: Dockerfile
+    image: tours-api
+    container_name: tours_api_container
+    restart: always
+    networks:
+      - database
+    ports:
+      - "3000:3000"
+    depends_on:
+      - tours_database
+    environment:
+      POSTGRES_ADDR: "postgres://postgres:root@tours_database:5432/tours"
+      SERVER_PORT: 3000
+
+  encounters-api:
+    build:
+      context: ../soa-tourism-explorer/encounters-api
+      dockerfile: Dockerfile
+    image: encounters-api
+    container_name: encounters_api_container
+    restart: always
+    networks:
+      - database
+    ports:
+      - "3030:3030"
+    depends_on:
+      - encounters_database
+    environment:
+      POSTGRES_ADDR: "postgres://postgres:root@encounters_database:5432/encounters"
+      SERVER_PORT: 3030
+
+  tours_database:
+    image: postgres
+    container_name: tours_db_container
+    restart: always
+    networks:
+      - database
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: tours
+    volumes:
+      - tours_database_data:/var/lib/postgresql/data
+
+  encounters_database:
+    image: postgres
+    container_name: encounters_db_container
+    restart: always
+    networks:
+      - database
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: encounters
+    volumes:
+      - encounters_database_data:/var/lib/postgresql/data
+
+
+
+volumes:
+  database-data:
+    name: explorer
+
+  tours_database_data:
+    name: tours_database_volume
+
+  encounters_database_data:
+    name: encounters_database_volume
+
+networks:
+  database:
+    name: database
+    driver: bridge
