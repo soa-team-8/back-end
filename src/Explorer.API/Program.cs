@@ -24,6 +24,10 @@ else
     app.UseHsts();
 }
 */
+app.UseDeveloperExceptionPage();
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseRouting();
 app.UseCors(corsPolicy);
 app.UseHttpsRedirection();
