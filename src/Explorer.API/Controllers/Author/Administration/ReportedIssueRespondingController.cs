@@ -18,7 +18,7 @@ namespace Explorer.API.Controllers.Author.Administration
         public ReportedIssueRespondingController(IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("http://localhost:3000");
+            _httpClient.BaseAddress = new Uri("http://tours-api:3000");
         }
 
         [HttpPost("response/{id:int}")]

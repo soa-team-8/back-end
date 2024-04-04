@@ -36,7 +36,19 @@ ENV PAYMENTS_TARGET_PROJECT=Explorer.Payments.Infrastructure
 
 ENV BLOG_TARGET_PROJECT=Explorer.Blog.Infrastructure
 
+ENV TOURS_TARGET_PROJECT=Explorer.Tours.Infrastructure
+
 CMD PATH="$PATH:/root/.dotnet/tools" \
+    dotnet-ef migrations add "${MIGRATION}-tours" \
+        -s "${STARTUP_PROJECT}/${STARTUP_PROJECT}.csproj" \
+        -p "Modules/Tours/Explorer.Tours.Infrastructure/Explorer.Tours.Infrastructure.csproj" \
+        -c "ToursContext" \
+        --configuration Release && \
+    dotnet-ef database update "${MIGRATION}-tours" \
+        -s "${STARTUP_PROJECT}/${STARTUP_PROJECT}.csproj" \
+        -p "Modules/Tours/Explorer.Tours.Infrastructure/Explorer.Tours.Infrastructure.csproj" \
+        -c "ToursContext" \ 
+        --configuration Release && \
     dotnet-ef migrations add "${MIGRATION}-stakeholders" \
         -s "${STARTUP_PROJECT}/${STARTUP_PROJECT}.csproj" \
         -p "Modules/Stakeholders/${STAKEHOLDERS_TARGET_PROJECT}/${STAKEHOLDERS_TARGET_PROJECT}.csproj" \
@@ -67,4 +79,4 @@ CMD PATH="$PATH:/root/.dotnet/tools" \
         -s "${STARTUP_PROJECT}/${STARTUP_PROJECT}.csproj" \
         -p "Modules/Blog/${BLOG_TARGET_PROJECT}/${BLOG_TARGET_PROJECT}.csproj" \
         -c "BlogContext" \
-        --configuration Release
+        --configuration Release 
