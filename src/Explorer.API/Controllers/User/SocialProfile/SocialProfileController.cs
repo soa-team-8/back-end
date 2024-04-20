@@ -1,11 +1,13 @@
 ﻿using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net;
+using System.Text;
 
 namespace Explorer.API.Controllers.User.SocialProfile
 {
@@ -28,24 +30,10 @@ namespace Explorer.API.Controllers.User.SocialProfile
         public async Task<ActionResult<SocialProfileDto>> Follow(int followerId, int followedId)
         {
             var response = await _httpClient.PostAsync($"/social-profile/follow/{followerId}/{followedId}", null);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return Ok("Followed successfully.");
-            }
-            else if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                return BadRequest("Invalid follower ID or followed ID.");
-            }
-            else if (response.StatusCode == HttpStatusCode.InternalServerError)
-            {
-                return StatusCode(500, "Failed to follow user.");
-            }
-            else
-            {
-                return StatusCode((int)response.StatusCode, "Unknown error occurred.");
-            }
-
+            response.EnsureSuccessStatusCode();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<SocialProfileDto>(jsonResponse);
+            return Ok(result);
 
             //var result = _userProfileService.Follow(followerId, followedId);
 
@@ -56,23 +44,10 @@ namespace Explorer.API.Controllers.User.SocialProfile
         public async Task<ActionResult<SocialProfileDto>> UnFollow(int followerId, int unFollowedId)
         {
             var response = await _httpClient.PostAsync($"/social-profile/unfollow/{followerId}/{unFollowedId}", null);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return Ok("Followed successfully.");
-            }
-            else if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                return BadRequest("Invalid follower ID or followed ID.");
-            }
-            else if (response.StatusCode == HttpStatusCode.InternalServerError)
-            {
-                return StatusCode(500, "Failed to follow user.");
-            }
-            else
-            {
-                return StatusCode((int)response.StatusCode, "Unknown error occurred.");
-            }
+            response.EnsureSuccessStatusCode();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<SocialProfileDto>(jsonResponse);
+            return Ok(result);
             //var result = _userProfileService.UnFollow(followerId, unFollowedId);
 
             //return CreateResponse(result);
@@ -81,10 +56,16 @@ namespace Explorer.API.Controllers.User.SocialProfile
         [HttpGet("get/{userId:int}")]
         public async Task<ActionResult<SocialProfileDto>> GetSocialProfile(int userId)
         {
+            var response = await _httpClient.GetAsync($"/social-profile/{userId}");
+            response.EnsureSuccessStatusCode();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<SocialProfileDto>(jsonResponse);
+            return Ok(result);
 
-            var socialProfile = _userProfileService.Get(userId);
 
-            return CreateResponse(socialProfile);
+            //var socialProfile = _userProfileService.Get(userId);
+
+            //return CreateResponse(socialProfile);
         }
     }
 }
