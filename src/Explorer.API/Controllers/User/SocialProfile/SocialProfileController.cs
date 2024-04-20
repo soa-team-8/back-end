@@ -34,10 +34,6 @@ namespace Explorer.API.Controllers.User.SocialProfile
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<SocialProfileDto>(jsonResponse);
             return Ok(result);
-
-            //var result = _userProfileService.Follow(followerId, followedId);
-
-            //return CreateResponse(result);
         }
 
         [HttpPost("un-follow/{followerId:int}/{unFollowedId:int}")]
@@ -48,9 +44,6 @@ namespace Explorer.API.Controllers.User.SocialProfile
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<SocialProfileDto>(jsonResponse);
             return Ok(result);
-            //var result = _userProfileService.UnFollow(followerId, unFollowedId);
-
-            //return CreateResponse(result);
         }
 
         [HttpGet("get/{userId:int}")]
@@ -61,11 +54,16 @@ namespace Explorer.API.Controllers.User.SocialProfile
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<SocialProfileDto>(jsonResponse);
             return Ok(result);
+        }
 
-
-            //var socialProfile = _userProfileService.Get(userId);
-
-            //return CreateResponse(socialProfile);
+        [HttpGet("recommendations/{userId:int}")]
+        public async Task<ActionResult<List<UserDto>>> GetRecommendations(int userId)
+        {
+            var response = await _httpClient.GetAsync($"/social-profile/recommendations/{userId}");
+            response.EnsureSuccessStatusCode();
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<List<UserDto>>(jsonResponse);
+            return Ok(result);
         }
     }
 }
