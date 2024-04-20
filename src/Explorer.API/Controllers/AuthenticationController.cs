@@ -3,6 +3,9 @@ using Explorer.Blog.Core.Domain.BlogPosts;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Explorer.API.Controllers;
@@ -10,20 +13,31 @@ namespace Explorer.API.Controllers;
 [Route("api/users")]
 public class AuthenticationController : BaseApiController
 {
+    private readonly HttpClient _httpClient;
+
     private readonly IAuthenticationService _authenticationService;
     private readonly ImageService _imageService;
     private readonly IVerificationService _verificationService;
 
-    public AuthenticationController(IAuthenticationService authenticationService, IVerificationService verificationService)
+    public AuthenticationController(IHttpClientFactory httpClientFactory, IAuthenticationService authenticationService, IVerificationService verificationService)
     {
         _authenticationService = authenticationService;
         _imageService = new ImageService();
         _verificationService = verificationService;
+
+        _httpClient = httpClientFactory.CreateClient();
+        _httpClient.BaseAddress = new Uri("http://localhost:9090");
     }
 
     [HttpPost]
-    public ActionResult<AccountRegistrationDto> RegisterTourist([FromForm] AccountRegistrationDto account, IFormFile profilePicture = null)
+    public async Task<ActionResult<AccountRegistrationDto>> RegisterTourist([FromForm] AccountRegistrationDto account, IFormFile profilePicture = null)
     {
+        var data = new { username = account.Username };
+        var json = JsonSerializer.Serialize(data);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync("/social-profile/user", content);
+        response.EnsureSuccessStatusCode();
+
         if (profilePicture != null)
         {
             var pictureUrl = _imageService.UploadImages(new List<IFormFile> { profilePicture });
