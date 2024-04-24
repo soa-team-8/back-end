@@ -26,7 +26,7 @@ public class AuthenticationController : BaseApiController
         _verificationService = verificationService;
 
         _httpClient = httpClientFactory.CreateClient();
-        _httpClient.BaseAddress = new Uri("http://localhost:9090");
+        _httpClient.BaseAddress = new Uri("http://followers-api:9090");
     }
 
     [HttpPost]

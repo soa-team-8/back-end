@@ -72,6 +72,23 @@ services:
       MONGODB_ADDR: "mongodb://encounters_database:27017"
       SERVER_PORT: 3030
 
+  followers-api:
+    build:
+      context: ../soa-tourism-explorer/followers-api
+      dockerfile: Dockerfile
+    image: followers-api
+    container_name: followers_api_container
+    restart: always
+    networks:
+      - database
+    ports:
+      - "9090:9090"
+    depends_on:
+      - followers_database
+    environment:
+      NEO4J_ADDR: "bolt://followers_database:7687"
+      SERVER_PORT: 9090
+
   tours_database:
     image: postgres
     container_name: tours_db_container
@@ -88,14 +105,28 @@ services:
 
   encounters_database:
     image: mongo
-    container_name: encounters_db_container  # Promenjeno ime kontejnera
+    container_name: encounters_db_container
     restart: always
     networks:
       - database
     ports:
-      - "27017:27017"  # MongoDB port
+      - "27017:27017"
     volumes:
-      - encounters_database_data:/data/db  # MongoDB podaci
+      - encounters_database_data:/data/db
+
+  followers_database:
+    image: neo4j:latest
+    container_name: followers_db_container 
+    restart: always
+    networks:
+      - database
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: neo4j/followers
+    volumes:
+      - followers_database_data:/data
 
   mongo-express:
     image: mongo-express
@@ -122,6 +153,9 @@ volumes:
 
   encounters_database_data:
     name: encounters_database_volume
+
+  followers_database_data:
+    name: followers_database_volume
 
 networks:
   database:

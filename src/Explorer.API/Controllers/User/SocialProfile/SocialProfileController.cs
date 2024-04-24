@@ -1,13 +1,8 @@
 ﻿using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
-using Explorer.Stakeholders.Core.Domain;
-using Explorer.Stakeholders.Infrastructure.Authentication;
-using Explorer.Tours.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net;
-using System.Text;
 
 namespace Explorer.API.Controllers.User.SocialProfile
 {
@@ -23,7 +18,7 @@ namespace Explorer.API.Controllers.User.SocialProfile
         {
             _userProfileService = userProfileService;
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("http://localhost:9090");
+            _httpClient.BaseAddress = new Uri("http://followers-api:9090");
         }
 
         [HttpPost("follow/{followerId:int}/{followedId:int}")]
