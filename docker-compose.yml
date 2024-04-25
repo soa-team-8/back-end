@@ -86,8 +86,10 @@ services:
     depends_on:
       - followers_database
     environment:
-      NEO4J_ADDR: "bolt://followers_database:7687"
-      SERVER_PORT: 9090
+      - NEO4J_DB=bolt://followers_database:7687
+      - NEO4J_USERNAME=neo4j
+      - NEO4J_PASS=followers
+      - SERVER_PORT=9090
 
   tours_database:
     image: postgres
