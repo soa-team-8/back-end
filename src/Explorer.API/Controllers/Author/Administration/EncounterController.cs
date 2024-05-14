@@ -58,12 +58,14 @@ namespace Explorer.API.Controllers.Author.Administration
                 }
             }
 
-            var response = await Client.PostAsync($"http://encounters-api:3030/encounters/author", formData);;
+            //var response = await Client.PostAsync($"http://encounters-api:3030/encounters/author", formData);
+            var response = await Client.PostAsync($"http://localhost:3030/encounters/author", formData); ;
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
                 var encId = (long)JObject.Parse(jsonResponse)["id"];
-                response = await Client.PutAsync($"http://tours-api:3000/checkpoints/setEnc/{checkpointId}/{encId}/{isSecretPrerequisite}", null);
+                //response = await Client.PutAsync($"http://tours-api:3000/checkpoints/setEnc/{checkpointId}/{encId}/{isSecretPrerequisite}", null);
+                response = await Client.PutAsync($"http://localhost:3000/checkpoints/setEnc/{checkpointId}/{encId}/{isSecretPrerequisite}", null);
             }
 
             jsonResponse = await response.Content.ReadAsStringAsync();
@@ -82,7 +84,8 @@ namespace Explorer.API.Controllers.Author.Administration
             }
 
             using StringContent jsonContent = new(JsonSerializer.Serialize(encounter), Encoding.UTF8, "application/json");
-            using HttpResponseMessage response = await Client.PutAsync("http://encounters-api:3030/encounters/" + encounter.Id, jsonContent);
+            //using HttpResponseMessage response = await Client.PutAsync("http://encounters-api:3030/encounters/" + encounter.Id, jsonContent);
+            using HttpResponseMessage response = await Client.PutAsync("http://localhost:3030/encounters/" + encounter.Id, jsonContent);
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
 
@@ -94,7 +97,8 @@ namespace Explorer.API.Controllers.Author.Administration
         public async Task<ActionResult> Delete(int id)
         {
             //var result = _encounterService.Delete(id, User.PersonId());
-            using HttpResponseMessage response = await Client.DeleteAsync("http://encounters-api:3030/encounters/" + id);
+            //using HttpResponseMessage response = await Client.DeleteAsync("http://encounters-api:3030/encounters/" + id);
+            using HttpResponseMessage response = await Client.DeleteAsync("http://localhost:3030/encounters/" + id);
 
             // Extract status code from HttpResponseMessage
             HttpStatusCode statusCode = response.StatusCode;
@@ -118,7 +122,8 @@ namespace Explorer.API.Controllers.Author.Administration
         public async Task<ActionResult<EncounterDto>> GetById(int id)
         {
             //var result = _encounterService.Get(id);
-            using HttpResponseMessage response = await Client.GetAsync("http://encounters-api:3030/encounters/" + id);
+            //using HttpResponseMessage response = await Client.GetAsync("http://encounters-api:3030/encounters/" + id);
+            using HttpResponseMessage response = await Client.GetAsync("http://localhost:3030/encounters/" + id);
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
             return CreateResponse(jsonResponse.ToResult());

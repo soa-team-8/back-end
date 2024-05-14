@@ -43,7 +43,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         public async Task<ActionResult<EncounterDto>> GetById([FromRoute] int id)
         {
 
-            using HttpResponseMessage response = await Client.GetAsync("http://encounters-api:3030/encounters/execution/" + id);
+            using HttpResponseMessage response = await Client.GetAsync("http://localhost:3030/encounters/execution/" + id);
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
             return CreateResponse(jsonResponse.ToResult());
@@ -67,7 +67,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             return CreateResponse(result);
             */
             using StringContent jsonContent = new(JsonSerializer.Serialize(encounterExecution), Encoding.UTF8, "application/json");
-            using HttpResponseMessage response = await Client.PutAsync("http://encounters-api:3030/encounters/execution/" + User.PersonId() + "/" + encounterExecution.Id, jsonContent);
+            using HttpResponseMessage response = await Client.PutAsync("http://localhost:3030/encounters/execution/" + User.PersonId() + "/" + encounterExecution.Id, jsonContent);
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
             return CreateResponse(jsonResponse.ToResult());
@@ -86,7 +86,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            using HttpResponseMessage response = await Client.DeleteAsync("http://encounters-api:3030/encounters/execution/" + User.PersonId() + "/" + id);
+            using HttpResponseMessage response = await Client.DeleteAsync("http://localhost:3030/encounters/execution/" + User.PersonId() + "/" + id);
 
             HttpStatusCode statusCode = response.StatusCode;
             string content = await response.Content.ReadAsStringAsync();
@@ -115,7 +115,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         public async Task<ActionResult<EncounterExecutionDto>> Activate([FromRoute] int id, [FromForm] double touristLatitude, [FromForm] double touristLongitude)
         {
             var queryString = $"?touristLatitude={Uri.EscapeDataString(touristLatitude.ToString().Replace(",", "."))}&touristLongitude={Uri.EscapeDataString(touristLongitude.ToString().Replace(",", "."))}";
-            using HttpResponseMessage response = await Client.PutAsync("http://encounters-api:3030/encounters/execution/activate/" + User.PersonId() + "/" + id + queryString, null);
+            using HttpResponseMessage response = await Client.PutAsync("http://localhost:3030/encounters/execution/activate/" + User.PersonId() + "/" + id + queryString, null);
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
             return CreateResponse(jsonResponse.ToResult());
@@ -139,7 +139,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         public async Task<ActionResult<EncounterExecutionDto>> CompleteExecution([FromRoute] int id, [FromForm] double touristLatitude, [FromForm] double touristLongitude)
         {
             var queryString = $"?touristLatitude={Uri.EscapeDataString(touristLatitude.ToString().Replace(",", "."))}&touristLongitude={Uri.EscapeDataString(touristLongitude.ToString().Replace(",", "."))}";
-            using HttpResponseMessage response = await Client.PutAsync("http://encounters-api:3030/encounters/execution/complete/" + User.PersonId() + "/" + id + queryString, null);
+            using HttpResponseMessage response = await Client.PutAsync("http://localhost:3030/encounters/execution/complete/" + User.PersonId() + "/" + id + queryString, null);
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
             string jsonExecution = string.Empty;
@@ -191,7 +191,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
                 return Unauthorized();
             }
 
-            using HttpResponseMessage response = await Client.GetAsync("http://encounters-api:3030/encounters/execution/get-all-by-tourist/" + User.PersonId());
+            using HttpResponseMessage response = await Client.GetAsync("http://localhost:3030/encounters/execution/get-all-by-tourist/" + User.PersonId());
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
             return CreateResponse(jsonResponse.ToResult());
@@ -203,7 +203,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         [HttpGet("get-all-completed")]
         public async Task<ActionResult<PagedResult<EncounterExecutionDto>>> GetAllCompletedByTourist([FromQuery] int page, [FromQuery] int pageSize)
         {
-            using HttpResponseMessage response = await Client.GetAsync("http://encounters-api:3030/encounters/execution/get-completed-by-tourist/" + User.PersonId());
+            using HttpResponseMessage response = await Client.GetAsync("http://localhost:3030/encounters/execution/get-completed-by-tourist/" + User.PersonId());
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
             return CreateResponse(jsonResponse.ToResult());
@@ -215,13 +215,13 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         [HttpGet("get-by-tour/{id:int}")]
         public async Task<ActionResult<EncounterExecutionDto>> GetByTour([FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
         {
-            using HttpResponseMessage checkpointResponse = await Client.GetAsync("http://tours-api:3000/checkpoints/get-encounter-ids/" + id);
+            using HttpResponseMessage checkpointResponse = await Client.GetAsync("http://localhost:3000/checkpoints/get-encounter-ids/" + id);
             var jsonCheckpointResponse = await checkpointResponse.Content.ReadAsStringAsync();
             List<int> encounterIDs = JsonSerializer.Deserialize<List<int>>(jsonCheckpointResponse);
 
             var queryString = $"?touristLatitude={Uri.EscapeDataString(touristLatitude.ToString().Replace(",", "."))}&touristLongitude={Uri.EscapeDataString(touristLongitude.ToString().Replace(",", "."))}&encounterIds={string.Join(",", encounterIDs)}";
 
-            using HttpResponseMessage response = await Client.GetAsync("http://encounters-api:3030/encounters/execution/get-by-tour/" + User.PersonId() + queryString);
+            using HttpResponseMessage response = await Client.GetAsync("http://localhost:3030/encounters/execution/get-by-tour/" + User.PersonId() + queryString);
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
             return CreateResponse(jsonResponse.ToResult());
@@ -236,14 +236,14 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         [HttpGet("social/checkRange/{id:int}/{tourId:int}")]
         public async Task<ActionResult<EncounterExecutionDto>> CheckPosition([FromRoute] int tourId, [FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
         {
-            using HttpResponseMessage checkpointResponse = await Client.GetAsync("http://tours-api:3000/checkpoints/get-encounter-ids/" + tourId);
+            using HttpResponseMessage checkpointResponse = await Client.GetAsync("http://localhost:3000/checkpoints/get-encounter-ids/" + tourId);
             var jsonCheckpointResponse = await checkpointResponse.Content.ReadAsStringAsync();
             List<int> encounterIDs = JsonSerializer.Deserialize<List<int>>(jsonCheckpointResponse);
 
 
             var queryString = $"?touristLatitude={Uri.EscapeDataString(touristLatitude.ToString().Replace(",", "."))}&touristLongitude={Uri.EscapeDataString(touristLongitude.ToString().Replace(",", "."))}&encounterIds={string.Join(",", encounterIDs)}";
 
-            var response = await Client.GetAsync($"http://encounters-api:3030/encounters/execution/social-encounter/check-range/{id}/{tourId}/{User.PersonId()}{queryString}");
+            var response = await Client.GetAsync($"http://localhost:3030/encounters/execution/social-encounter/check-range/{id}/{tourId}/{User.PersonId()}{queryString}");
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
@@ -286,7 +286,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         [HttpGet("location/checkRange/{id:int}/{tourId:int}")]
         public async Task<ActionResult<EncounterExecutionDto>> CheckPositionLocationEncounter([FromRoute] int tourId, [FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
         {
-            using HttpResponseMessage checkpointResponse = await Client.GetAsync("http://tours-api:3000/checkpoints/get-encounter-ids/" + tourId);
+            using HttpResponseMessage checkpointResponse = await Client.GetAsync("http://localhost:3000/checkpoints/get-encounter-ids/" + tourId);
             var jsonCheckpointResponse = await checkpointResponse.Content.ReadAsStringAsync();
             List<int> encounterIDs = JsonSerializer.Deserialize<List<int>>(jsonCheckpointResponse);
 
@@ -294,7 +294,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
 
             var queryString = $"?touristLatitude={Uri.EscapeDataString(touristLatitude.ToString().Replace(",", "."))}&touristLongitude={Uri.EscapeDataString(touristLongitude.ToString().Replace(",", "."))}&encounterIds={string.Join(",", encounterIDs)}";
 
-            var response = await Client.GetAsync($"http://encounters-api:3030/encounters/execution/location-encounter/check-range/{id}/{tourId}/{User.PersonId()}{queryString}");
+            var response = await Client.GetAsync($"http://localhost:3030/encounters/execution/location-encounter/check-range/{id}/{tourId}/{User.PersonId()}{queryString}");
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
 
@@ -336,13 +336,13 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         [HttpGet("active/by-tour/{id:int}")]
         public async Task<ActionResult<List<EncounterExecutionDto>>> GetActiveByTour([FromRoute] int id)
         {
-            using HttpResponseMessage checkpointResponse = await Client.GetAsync("http://tours-api:3000/checkpoints/get-encounter-ids/" + id);
+            using HttpResponseMessage checkpointResponse = await Client.GetAsync("http://localhost:3000/checkpoints/get-encounter-ids/" + id);
             var jsonCheckpointResponse = await checkpointResponse.Content.ReadAsStringAsync();
             List<int> encounterIDs = JsonSerializer.Deserialize<List<int>>(jsonCheckpointResponse);
 
             var queryString = $"?encounterIds={string.Join(",", encounterIDs)}";
 
-            using HttpResponseMessage response = await Client.GetAsync("http://encounters-api:3030/encounters/execution/get-active-by-tour/" + User.PersonId() + queryString);
+            using HttpResponseMessage response = await Client.GetAsync("http://localhost:3030/encounters/execution/get-active-by-tour/" + User.PersonId() + queryString);
 
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
