@@ -63,7 +63,7 @@ namespace Explorer.API.Controllers.Author.Administration
             if (response.IsSuccessStatusCode)
             {
                 var encId = (long)JObject.Parse(jsonResponse)["id"];
-                response = await Client.PutAsync($"http://tours-api:3000/checkpoints/setEnc/{checkpointId}/{encId}/{isSecretPrerequisite}", null);
+                response = await Client.PutAsync($"http://localhost:3000/checkpoints/setEnc/{checkpointId}/{encId}/{isSecretPrerequisite}", null);
             }
 
             jsonResponse = await response.Content.ReadAsStringAsync();

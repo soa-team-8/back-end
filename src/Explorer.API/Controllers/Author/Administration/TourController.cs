@@ -14,7 +14,7 @@ public class TourController : BaseApiController
     public TourController(IHttpClientFactory httpClientFactory)
     {
         _httpClient = httpClientFactory.CreateClient();
-        _httpClient.BaseAddress = new Uri("http://tours-api:3000");
+        _httpClient.BaseAddress = new Uri("http://localhost:3000");
     }
 
     [HttpPost]
