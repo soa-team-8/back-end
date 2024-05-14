@@ -91,6 +91,39 @@ services:
       - NEO4J_PASS=followers
       - SERVER_PORT=9090
 
+  # spring-boot-app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   image: spring-boot-app
+  #   container_name: spring_boot_app_container
+  #   restart: always
+  #   networks:
+  #     - database
+  #   ports:
+  #     - "8888:8888"
+  #   depends_on:
+  #     - spring_boot_database
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:postgresql://spring_boot_database:5433/stakeholders
+  #     SPRING_DATASOURCE_USERNAME: postgres
+  #     SPRING_DATASOURCE_PASSWORD: super
+
+  # spring_boot_database:
+  #   image: postgres
+  #   container_name: spring_boot_db_container
+  #   restart: always
+  #   networks:
+  #     - database
+  #   environment:
+  #     POSTGRES_PASSWORD: super
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_DB: stakeholders
+  #   volumes:
+  #     - spring_boot_database_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5433:5432"
+
   tours_database:
     image: postgres
     container_name: tours_db_container
@@ -144,8 +177,6 @@ services:
     depends_on:
       - encounters_database
 
-
-
 volumes:
   database-data:
     name: explorer
@@ -158,6 +189,9 @@ volumes:
 
   followers_database_data:
     name: followers_database_volume
+
+  # spring_boot_database_data:
+  #   name: spring_boot_database_volume
 
 networks:
   database:
