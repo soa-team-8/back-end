@@ -28,7 +28,7 @@ namespace Explorer.API.Controllers.Tourist.Tour
             _emailService = emailService;
 
             _httpClient = httpClientFactory.CreateClient();
-            _httpClient.BaseAddress = new Uri("http://tours-api:3000");
+            _httpClient.BaseAddress = new Uri("http://localhost:3000");
         }
 
         [HttpPost("{tourId:int}")]
