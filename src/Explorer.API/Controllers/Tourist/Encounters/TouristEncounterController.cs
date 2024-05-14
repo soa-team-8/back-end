@@ -48,7 +48,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
                 }
             }
             
-            var response = await Client.PostAsync($"http://encounters-api:3030/encounters/tourist/{_touristService.GetTouristById(User.PersonId()).Value.Level}/{User.PersonId()}", formData);
+            var response = await Client.PostAsync($"http://localhost:3030/encounters/tourist/{_touristService.GetTouristById(User.PersonId()).Value.Level}/{User.PersonId()}", formData);
             var jsonResponse = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
@@ -89,7 +89,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         [Authorize(Policy = "administratorPolicy")]
         public async Task<ActionResult<PagedResult<EncounterDto>>> GetAll()
         {
-            using HttpResponseMessage response = await Client.GetAsync("http://encounters-api:3030/encounters/get-all");
+            using HttpResponseMessage response = await Client.GetAsync("http://localhost:3030/encounters/get-all");
             var jsonResponse = await response.Content.ReadAsStringAsync();
             return CreateResponse(jsonResponse.ToResult());
         }
