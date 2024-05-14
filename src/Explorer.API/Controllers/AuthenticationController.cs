@@ -1,12 +1,10 @@
 ﻿using Explorer.API.Services;
-using Explorer.Blog.Core.Domain.BlogPosts;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using static System.Net.Mime.MediaTypeNames;
+using System.Text.Json.Serialization;
 
 namespace Explorer.API.Controllers;
 
@@ -26,7 +24,6 @@ public class AuthenticationController : BaseApiController
         _verificationService = verificationService;
 
         _httpClient = httpClientFactory.CreateClient();
-        _httpClient.BaseAddress = new Uri("http://followers-api:9090");
     }
 
     [HttpPost]
@@ -35,7 +32,7 @@ public class AuthenticationController : BaseApiController
         var data = new { username = account.Username };
         var json = JsonSerializer.Serialize(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync("/social-profile/user", content);
+        var response = await _httpClient.PostAsync("http://followers-api:9090/social-profile/user", content);
         response.EnsureSuccessStatusCode();
 
         if (profilePicture != null)
@@ -47,12 +44,29 @@ public class AuthenticationController : BaseApiController
         return CreateResponse(result);
     }
 
-
     [HttpPost("login")]
-    public ActionResult<AuthenticationTokensDto> Login([FromBody] CredentialsDto credentials)
+    public async Task<ActionResult<AuthenticationTokensDto>> Login([FromBody] CredentialsDto credentials)
     {
         var result = _authenticationService.Login(credentials);
-        return CreateResponse(result);
+
+        var requestBody = new
+        {
+            username = credentials.Username,
+            password = credentials.Password
+        };
+
+        var jsonRequest = JsonSerializer.Serialize(requestBody);
+
+        var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync("http://host.docker.internal:8888/api/users/login", content);
+
+        if (!response.IsSuccessStatusCode) return StatusCode((int)response.StatusCode, "Login failed");
+        var jsonResponse = await response.Content.ReadAsStringAsync();
+        var authenticationTokens = JsonSerializer.Deserialize<AuthenticationTokensDto>(jsonResponse);
+
+        return authenticationTokens;
+
     }
 
     [HttpGet("verify/{verificationTokenData}")]
@@ -75,4 +89,13 @@ public class AuthenticationController : BaseApiController
         var result = _authenticationService.SendPasswordResetEmail(username);
         return CreateResponse(result);
     }
+}
+
+public class AuthenticationTokensDto
+{
+    [JsonPropertyName("access_token")]
+    public string AccessToken { get; set; }
+
+    [JsonPropertyName("id")]
+    public long Id { get; set; }
 }
