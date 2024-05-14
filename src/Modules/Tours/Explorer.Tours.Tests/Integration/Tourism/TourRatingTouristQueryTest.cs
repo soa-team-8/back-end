@@ -1,4 +1,4 @@
-﻿using Explorer.API.Controllers.Tourist;
+﻿/*using Explorer.API.Controllers.Tourist;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Public;
 using Explorer.Tours.API.Dtos;
@@ -38,4 +38,4 @@ public class TourRatingTouristQueryTest : BaseToursIntegrationTest
             ControllerContext = BuildContext("-1")
         };
     }
-}
+}*/

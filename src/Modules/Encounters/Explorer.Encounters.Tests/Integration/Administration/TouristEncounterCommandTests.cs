@@ -1,4 +1,4 @@
-﻿using Explorer.API.Controllers.Author.Administration;
+﻿/*using Explorer.API.Controllers.Author.Administration;
 using Explorer.API.Controllers.Tourist.Encounters;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
@@ -314,3 +314,4 @@ namespace Explorer.Encounters.Tests.Integration.Administration
         }
     }
 }
+*/

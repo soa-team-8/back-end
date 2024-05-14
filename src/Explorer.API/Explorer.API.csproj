@@ -53,6 +53,7 @@
 
   <ItemGroup>
     <Folder Include="Protos\" />
+	  <Protobuf Include="Protos\tours.proto" />
   </ItemGroup>
 
 </Project>

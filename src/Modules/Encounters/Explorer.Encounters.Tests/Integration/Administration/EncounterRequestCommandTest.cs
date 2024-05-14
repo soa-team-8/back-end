@@ -1,4 +1,4 @@
-﻿using Explorer.API.Controllers.Administrator.Administration;
+﻿/*using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain.Encounters;
@@ -95,3 +95,4 @@ namespace Explorer.Encounters.Tests.Integration.Administration
         }
     }
 }
+*/

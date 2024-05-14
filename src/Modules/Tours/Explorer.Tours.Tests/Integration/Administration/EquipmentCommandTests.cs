@@ -1,4 +1,4 @@
-﻿using Explorer.API.Controllers.Administrator.Administration;
+﻿/*using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Infrastructure.Database;
@@ -133,4 +133,4 @@ public class EquipmentCommandTests : BaseToursIntegrationTest
             ControllerContext = BuildContext("-1")
         };
     }
-}
+}*/

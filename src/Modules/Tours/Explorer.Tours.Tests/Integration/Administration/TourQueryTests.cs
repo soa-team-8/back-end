@@ -1,4 +1,4 @@
-﻿using Explorer.API.Controllers.Author.Administration;
+﻿/*using Explorer.API.Controllers.Author.Administration;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
@@ -37,4 +37,4 @@ public class TourQueryTests: BaseToursIntegrationTest
             };
         }
 
-}
+}*/

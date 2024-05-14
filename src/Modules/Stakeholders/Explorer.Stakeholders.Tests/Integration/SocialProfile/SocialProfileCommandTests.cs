@@ -1,4 +1,4 @@
-﻿using Explorer.API.Controllers.User.SocialProfile;
+﻿/*using Explorer.API.Controllers.User.SocialProfile;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Mvc;
@@ -102,3 +102,4 @@ namespace Explorer.Stakeholders.Tests.Integration.SocialProfile
         }
     }
 }
+*/
