@@ -1,0 +1,55 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpcServiceTranscoding";
+import "Protos/google/api/annotations.proto";
+
+service TouristEncounterService {
+    rpc TouristCreateEncounter(TouristCreateEncounterRequest) returns (TouristCreateEncounterResponse) {
+        option (google.api.http) = {
+            post: "/api/administration/touristEncounter"
+            body: "*"
+        };
+    }
+
+    rpc TouristGetAllEncounters(TouristGetAllEncountersRequest) returns (TouristGetAllEncountersResponse) {
+        option (google.api.http) = {
+            get: "/api/administration/touristEncounter"
+        };
+    }
+}
+
+
+message TouristCreateEncounterRequest {
+    TouristEncounter encounter = 1;
+    int64 checkpoint_id = 2;
+    bool is_secret_prerequisite = 3;
+    repeated bytes images = 4;
+}
+
+message TouristCreateEncounterResponse {
+    TouristEncounter encounter = 1;
+}
+
+message TouristGetAllEncountersRequest {}
+
+message TouristGetAllEncountersResponse {
+    repeated TouristEncounter encounters = 1;
+}
+
+message TouristEncounter {
+    int64 author_id = 1;
+    int64 id = 2;
+    string name = 3;
+    string description = 4;
+    int32 XP = 5;
+    string status = 6;
+    string type = 7;
+    float longitude = 8;
+    float latitude = 9;
+    double location_longitude = 10;
+    double location_latitude = 11;
+    string image = 12;
+    double range = 13;
+    int32 required_people = 14;
+    repeated int32 active_tourists_ids = 15;
+}

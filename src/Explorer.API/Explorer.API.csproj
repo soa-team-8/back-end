@@ -54,6 +54,7 @@
   <ItemGroup>
 	  <Protobuf Include="Protos\tours.proto" />
     <Protobuf Include="Protos\encounters.proto" />
+    <Protobuf Include="Protos\tourist-encounters.proto" />
   </ItemGroup>
 
 </Project>

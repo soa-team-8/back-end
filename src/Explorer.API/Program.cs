@@ -1,4 +1,5 @@
 using Explorer.API.Controllers.Author.Administration;
+using Explorer.API.Controllers.Tourist.Encounters;
 using Explorer.API.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +40,7 @@ app.UseAuthorization();
 app.UseStaticFiles();
 app.MapControllers();
 app.MapGrpcService<EncounterProtoController>();
+app.MapGrpcService<TouristEncounterProtoController>();
 
 app.Run();
 
