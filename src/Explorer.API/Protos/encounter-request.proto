@@ -1,0 +1,62 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpcServiceTranscoding";
+import "Protos/google/api/annotations.proto";
+
+
+service EncounterRequestService {
+  rpc CreateEncounterRequest(CreateEncounterRequestDto) returns (EncounterRequestResponseDto) {
+    option (google.api.http) = {
+      post: "/api/administration/encounterRequests"
+      body: "*"
+    };
+  }
+
+  rpc GetAllEncounterRequests(GetAllEncounterRequestsRequest) returns (GetAllEncounterRequestsResponse) {
+    option (google.api.http) = {
+      get: "/api/administration/encounterRequests"
+    };
+  }
+
+  rpc AcceptEncounterRequest(AcceptEncounterRequestDto) returns (EncounterRequestResponseDto) {
+    option (google.api.http) = {
+      put: "/api/administration/encounterRequests/accept/{id}"
+    };
+  }
+
+  rpc RejectEncounterRequest(RejectEncounterRequestDto) returns (EncounterRequestResponseDto) {
+    option (google.api.http) = {
+      put: "/api/administration/encounterRequests/reject/{id}"
+    };
+  }
+}
+
+message EncounterRequestDto {
+  int32 id = 1;
+  int64 tourist_id = 2;
+  int64 encounter_id = 3;
+  string status = 4;
+}
+
+message CreateEncounterRequestDto {
+  EncounterRequestDto encounter_request = 1;
+}
+
+message AcceptEncounterRequestDto {
+  int32 id = 1;
+}
+
+message RejectEncounterRequestDto {
+  int32 id = 1;
+}
+
+message GetAllEncounterRequestsRequest {}
+
+message GetAllEncounterRequestsResponse {
+    repeated EncounterRequestDto encounter_requests = 1;
+}
+
+message EncounterRequestResponseDto {
+  EncounterRequestDto encounter_request = 1;
+}
+

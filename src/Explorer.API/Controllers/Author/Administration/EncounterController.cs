@@ -39,7 +39,7 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
 
-        [HttpPost]
+        //[HttpPost]
         public async Task<ActionResult<EncounterDto>> Create([FromForm] EncounterDto encounter,[FromQuery] long checkpointId, [FromQuery] bool isSecretPrerequisite, [FromForm] List<IFormFile>? imageF = null)
         {
 
@@ -71,7 +71,7 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(jsonResponse.ToResult());
         }
 
-        [HttpPut]
+        //[HttpPut]
         public async Task<ActionResult<EncounterDto>> Update([FromForm] EncounterDto encounter, [FromForm] List<IFormFile>? imageF = null)
         {
 
@@ -92,7 +92,7 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(jsonResponse.ToResult());
         }
 
-        [HttpDelete("{id:int}")]
+        //[HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
             //var result = _encounterService.Delete(id, User.PersonId());
@@ -117,7 +117,7 @@ namespace Explorer.API.Controllers.Author.Administration
             return actionResult;
         }
 
-        [HttpGet("{id:int}")]
+        //[HttpGet("{id:int}")]
         public async Task<ActionResult<EncounterDto>> GetById(int id)
         {
             //var result = _encounterService.Get(id);

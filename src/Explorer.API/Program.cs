@@ -1,5 +1,7 @@
 using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.API.Controllers.Author.Administration;
+using Explorer.API.Controllers.Tourist.Encounters;
+using Explorer.API.Controllers.User.SocialProfile;
 using Explorer.API.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +29,7 @@ else
     app.UseHsts();
 }*/
 app.UseDeveloperExceptionPage();
+
 //app.UseSwagger();
 //app.UseSwaggerUI();
 
@@ -41,6 +44,10 @@ app.MapControllers();
 app.MapGrpcService<TourProtoController>();
 app.MapGrpcService<CheckpointProtoControler>();
 app.MapGrpcService<EquipmentProtoController>();
+app.MapGrpcService<EncounterProtoController>();
+app.MapGrpcService<TouristEncounterProtoController>();
+app.MapGrpcService<EncounterRequestProtoController>();
+app.MapGrpcService<SocialProfileProtoController>();
 
 app.Run();
 

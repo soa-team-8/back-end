@@ -29,8 +29,8 @@ namespace Explorer.API.Controllers.Tourist.Encounters
 
         }
 
-        [HttpPost]
-        [Authorize(Policy = "touristPolicy")]
+        //[HttpPost]
+        //[Authorize(Policy = "touristPolicy")]
         public async Task<ActionResult<EncounterDto>> Create([FromForm] EncounterDto encounter, [FromQuery] long checkpointId, [FromQuery] bool isSecretPrerequisite, [FromForm] List<IFormFile>? imageF = null)
         {
             using var formData = new MultipartFormDataContent();
@@ -85,8 +85,8 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             return CreateResponse(result);
         }
 
-        [HttpGet]
-        [Authorize(Policy = "administratorPolicy")]
+        //[HttpGet]
+        //[Authorize(Policy = "administratorPolicy")]
         public async Task<ActionResult<PagedResult<EncounterDto>>> GetAll()
         {
             using HttpResponseMessage response = await Client.GetAsync("http://localhost:3030/encounters/get-all");
@@ -108,35 +108,6 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         {
             var result = _encounterService.GetRequestInfo(encounterId);
             return CreateResponse(result);
-        }
-
-        // Funkcija za transformaciju koordinata
-        private double TransformisiKoordinatu(double koordinata)
-        {
-            // Pretvori broj u string kako bi se mogao indeksirati
-            string koordinataString = koordinata.ToString();
-
-            // Ako je koordinata dovoljno dugačka
-            if (koordinataString.Length > 2)
-            {
-                // Uzmi prva dva znaka
-                string prviDeo = koordinataString.Substring(0, 2);
-
-                // Uzmi ostatak broja posle prva dva znaka
-                string drugiDeo = koordinataString.Substring(2);
-
-                // Sastavi transformisanu vrednost
-                string transformisanaKoordinataString = prviDeo + '.' + drugiDeo;
-
-                // Parsiraj rezultat nazad kao double
-                if (double.TryParse(transformisanaKoordinataString, NumberStyles.Any, CultureInfo.InvariantCulture, out double transformisanaKoordinata))
-                {
-                    return transformisanaKoordinata;
-                }
-            }
-
-            // Ako je koordinata prekratka ili neuspešno parsiranje, vrati nepromenjenu vrednost
-            return koordinata;
         }
     }
 }
