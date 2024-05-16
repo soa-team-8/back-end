@@ -106,8 +106,8 @@ public class CheckpointController : BaseApiController
         return Ok(new { message = "Checkpoint deleted successfully" });
     }
 
-    [HttpGet("{id:int}")]
-    [Authorize(Policy = "authorPolicy")]
+    //[HttpGet("{id:int}")]
+    //[Authorize(Policy = "authorPolicy")]
     public async Task<ActionResult> GetAllByTour([FromQuery] int page, [FromQuery] int pageSize, int id)
     {
         var response = await _httpClient.GetAsync($"/checkpoints/{id}/tour");
@@ -153,7 +153,7 @@ public class CheckpointController : BaseApiController
         return Ok(createdCheckpoint);
     }
 
-    [HttpGet]
+    //[HttpGet]
     public async Task<ActionResult> GetAllPaged([FromQuery] int page, [FromQuery] int pageSize)
     {
         var response = await _httpClient.GetAsync("/checkpoints");
