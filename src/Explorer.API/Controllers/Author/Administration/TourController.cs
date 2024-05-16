@@ -76,7 +76,7 @@ public class TourController : BaseApiController
         return Ok(content);
     }
 
-    [HttpDelete("{id:int}")]
+   // [HttpDelete("{id:int}")]
     public async Task<ActionResult> Delete(int id)
     {
         var response = await _httpClient.DeleteAsync($"/tours/{id}");
@@ -84,7 +84,7 @@ public class TourController : BaseApiController
         return Ok(new { message = "Tour deleted successfully" });
     }
 
-    [HttpPut("publishedTours/{id:int}")]
+   // [HttpPut("publishedTours/{id:int}")]
     public async Task<ActionResult> Publish(int id)
     {
         var response = await _httpClient.PutAsync($"/tours/{id}/publish", null);
@@ -93,7 +93,7 @@ public class TourController : BaseApiController
         return Ok(content);
     }
 
-    [HttpPut("archivedTours/{id:int}")]
+   // [HttpPut("archivedTours/{id:int}")]
     public async Task<ActionResult> Archive(int id)
     {
         var response = await _httpClient.PutAsync($"/tours/{id}/archive", null);
@@ -102,7 +102,7 @@ public class TourController : BaseApiController
         return Ok(content);
     }
 
-    [HttpPut("{id:int}")]
+   // [HttpPut("{id:int}")]
     public async Task<ActionResult> Update(int id, [FromBody] TourDto tour)
     {
         var response = await _httpClient.PutAsJsonAsync($"/tours/{id}", tour);
