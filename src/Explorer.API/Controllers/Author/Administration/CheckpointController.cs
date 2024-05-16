@@ -16,8 +16,8 @@ public class CheckpointController : BaseApiController
         _httpClient.BaseAddress = new Uri("http://localhost:3000");
     }
 
-    [HttpPost("create/{status}")]
-    [Authorize(Policy = "authorPolicy")]
+    //[HttpPost("create/{status}")]
+    //[Authorize(Policy = "authorPolicy")]
     public async Task<ActionResult<CheckpointDto>> Create([FromForm] CheckpointDto checkpoint, [FromRoute] string status, [FromForm] List<IFormFile>? pictures = null)
     {
         var formData = new MultipartFormDataContent();
@@ -43,8 +43,8 @@ public class CheckpointController : BaseApiController
         return Ok(createdCheckpoint);
     }
 
-    [HttpPut("create-secret/{checkpointId:int}")]
-    [Authorize(Policy = "authorPolicy")]
+    //[HttpPut("create-secret/{checkpointId:int}")]
+    //[Authorize(Policy = "authorPolicy")]
     public async Task<ActionResult<CheckpointDto>> CreateCheckpointSecret([FromForm] CheckpointSecretDto checkpointSecret, int checkpointId, [FromForm] List<IFormFile>? pictures = null)
     {
         var formData = new MultipartFormDataContent();
@@ -70,8 +70,8 @@ public class CheckpointController : BaseApiController
         return Ok(createdCheckpoint);
     }
 
-    [HttpPut("update-secret/{checkpointId:int}")]
-    [Authorize(Policy = "authorPolicy")]
+    //[HttpPut("update-secret/{checkpointId:int}")]
+    //[Authorize(Policy = "authorPolicy")]
     public async Task<ActionResult<CheckpointDto>> UpdateCheckpointSecret([FromForm] CheckpointSecretDto checkpointSecret, int checkpointId, [FromForm] List<IFormFile>? pictures = null)
     {
         var formData = new MultipartFormDataContent();
@@ -97,8 +97,8 @@ public class CheckpointController : BaseApiController
         return Ok(createdCheckpoint);
     }
 
-    [HttpDelete("{id:int}")]
-    [Authorize(Policy = "authorPolicy")]
+   // [HttpDelete("{id:int}")]
+    //[Authorize(Policy = "authorPolicy")]
     public async Task<ActionResult> Delete(int id)
     {
         var response = await _httpClient.DeleteAsync($"/checkpoints/{id}");
@@ -106,8 +106,8 @@ public class CheckpointController : BaseApiController
         return Ok(new { message = "Checkpoint deleted successfully" });
     }
 
-    [HttpGet("{id:int}")]
-    [Authorize(Policy = "authorPolicy")]
+    //[HttpGet("{id:int}")]
+    //[Authorize(Policy = "authorPolicy")]
     public async Task<ActionResult> GetAllByTour([FromQuery] int page, [FromQuery] int pageSize, int id)
     {
         var response = await _httpClient.GetAsync($"/checkpoints/{id}/tour");
@@ -126,8 +126,8 @@ public class CheckpointController : BaseApiController
         return Ok(content);
     }
 
-    [HttpPut("{id:int}")]
-    [Authorize(Policy = "authorPolicy")]
+    //[HttpPut("{id:int}")]
+    //[Authorize(Policy = "authorPolicy")]
     public async Task<ActionResult<CheckpointDto>> Update([FromForm] CheckpointDto checkpoint, int id, [FromForm] List<IFormFile>? pictures = null)
     {
         var formData = new MultipartFormDataContent();
@@ -153,7 +153,7 @@ public class CheckpointController : BaseApiController
         return Ok(createdCheckpoint);
     }
 
-    [HttpGet]
+    //[HttpGet]
     public async Task<ActionResult> GetAllPaged([FromQuery] int page, [FromQuery] int pageSize)
     {
         var response = await _httpClient.GetAsync("/checkpoints");

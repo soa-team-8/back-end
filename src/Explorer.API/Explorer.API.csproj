@@ -52,7 +52,10 @@
   </ItemGroup>  
 
   <ItemGroup>
+	  <Protobuf Include="Protos\equipment.proto" />
+	  <Protobuf Include="Protos\checkpoint.proto" />
 	  <Protobuf Include="Protos\tours.proto" />
+	  <Protobuf Include="Protos\reporteIssuesReview.proto" />
     <Protobuf Include="Protos\encounters.proto" />
     <Protobuf Include="Protos\tourist-encounters.proto" />
     <Protobuf Include="Protos\encounter-request.proto" />

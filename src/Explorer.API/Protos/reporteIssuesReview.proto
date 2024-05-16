@@ -1,0 +1,164 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpcServiceTranscoding";
+
+import "Protos/google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+service ReportedIssuesReviewServices {
+  rpc GetAll(GetAllReportedIssuesRequest) returns (PagedResultReportedIssueDto) {
+    option (google.api.http) = {
+      get: "/api/administration/reportedIssues"
+    };
+  }
+
+  rpc Respond(RespondToReportedIssueRequest) returns (ReportedIssueDto) {
+    option (google.api.http) = {
+      post: "/api/administration/reportedIssues/comment/{id}"
+      body: "*"
+    };
+  }
+
+  rpc AddDeadline(AddDeadlineToReportedIssueRequest) returns (ReportedIssueDto) {
+    option (google.api.http) = {
+      put: "/api/administration/reportedIssues/deadline/{id}"
+      body: "*"
+    };
+  }
+
+  rpc PenalizeAuthor(PenalizeAuthorOfReportedIssueRequest) returns (ReportedIssueDto) {
+    option (google.api.http) = {
+      put: "/api/administration/reportedIssues/penalizeAuthor/{id}"
+    };
+  }
+
+  rpc Close(CloseReportedIssueRequest) returns (ReportedIssueDto) {
+    option (google.api.http) = {
+      put: "/api/administration/reportedIssues/closeReportedIssue/{id}"
+    };
+  }
+}
+
+message GetAllReportedIssuesRequest {
+  int32 page = 1;
+  int32 pageSize = 2;
+}
+
+message PagedResultReportedIssueDto {
+  repeated ReportedIssueDto items = 1;
+}
+
+message RespondToReportedIssueRequest {
+  int32 id = 1;
+  ReportedIssueCommentDto comment = 2;
+}
+
+message ReportedIssueCommentDto {
+  google.protobuf.Timestamp creation_time = 1;
+  int32 creator_id = 2;
+  string text = 3;
+  string person_name = 4;
+  string profile_picture_url = 5;
+}
+
+message AddDeadlineToReportedIssueRequest {
+  int32 id = 1;
+  google.protobuf.Timestamp deadline = 2;
+}
+
+message PenalizeAuthorOfReportedIssueRequest {
+  int32 id = 1;
+}
+
+message CloseReportedIssueRequest {
+  int32 id = 1;
+}
+
+message ReportedIssueDto {
+  int32 id = 1;
+  string category = 2;
+  string description = 3;
+  repeated ReportedIssueCommentDto comments = 4;
+  google.protobuf.Timestamp deadline = 5;
+  bool closed = 6;
+  bool resolved = 7;
+  int32 priority = 8;
+  google.protobuf.Timestamp time = 9;
+  int32 tour_id = 10;
+  int32 tourist_id = 11;
+  TourDtoRI tour = 12;
+  string person_name = 13;
+  string profile_picture_url = 14;
+}
+
+message TourDtoRI {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+  string demandingness_level = 4;
+  double price = 5;
+  repeated string tags = 6;
+  int32 author_id = 7;
+  string status = 8;
+  repeated EquipmentDtoRI equipment = 9;
+  repeated CheckpointDtoRI checkpoints = 10;
+  repeated PublishedTourDtoRI published_tours = 11;
+  repeated ArchivedTourDtoRI archived_tours = 12;
+  repeated TourTimeDtoRI tour_times = 13;
+  repeated TourRatingDtoRI tour_ratings = 14;
+  bool closed = 15;
+}
+
+message EquipmentDtoRI {
+  int32 id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message CheckpointDtoRI {
+  int64 id = 1;
+  int64 tour_id = 2;
+  int64 author_id = 3;
+  double longitude = 4;
+  double latitude = 5;
+  string name = 6;
+  string description = 7;
+  repeated string pictures = 8;
+  double required_time_in_seconds = 9;
+  CheckpointSecretDtoRI checkpoint_secret = 10;
+  int64 encounter_id = 11;
+  bool is_secret_prerequisite = 12;
+}
+
+message CheckpointSecretDtoRI {
+  string description = 1;
+  repeated string pictures = 2;
+}
+
+message PublishedTourDtoRI {
+  google.protobuf.Timestamp publishing_date = 1;
+}
+
+message ArchivedTourDtoRI {
+  google.protobuf.Timestamp archiving_date = 1;
+}
+
+message TourTimeDtoRI {
+  double time_in_seconds = 1;
+  double distance = 2;
+  string transportation = 3;
+}
+
+
+message TourRatingDtoRI {
+  int64 id = 1;
+  int32 rating = 2;
+  string comment = 3;
+  int32 tourist_id = 4;
+  int32 tour_id = 5;
+  google.protobuf.Timestamp tour_date = 6;
+  google.protobuf.Timestamp creation_date = 7;
+  repeated string image_names = 8;
+}
+
