@@ -1,0 +1,89 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "GrpcServiceTranscoding";
+import "Protos/google/api/annotations.proto";
+
+service SocialProfileService {
+  rpc Follow(FollowRequest) returns (FollowResponse) {
+    option (google.api.http) = {
+      post: "/api/social-profile/follow/{follower_id}/{followed_id}"
+    };
+  }
+
+  rpc UnFollow(UnFollowRequest) returns (UnFollowResponse) {
+    option (google.api.http) = {
+      post: "/api/social-profile/un-follow/{follower_id}/{unfollowed_id}"
+    };
+  }
+
+  rpc GetSocialProfile(GetSocialProfileRequest) returns (GetSocialProfileResponse) {
+    option (google.api.http) = {
+      get: "/api/social-profile/get/{user_id}"
+    };
+  }
+
+  rpc GetRecommendations(GetRecommendationsRequest) returns (GetRecommendationsResponse) {
+    option (google.api.http) = {
+      get: "/api/social-profile/recommendations/{user_id}"
+    };
+  }
+}
+
+message UserDto {
+  int32 id = 1;
+  string username = 2;
+  string password = 3;
+  RoleUser role = 4;
+  bool is_active = 5;
+  string email = 6;
+  string verification_token = 7;
+  bool is_verified = 8;
+}
+
+enum RoleUser {
+  Administrator = 0;
+  Author = 1;
+  Tourist = 2;
+}
+
+message SocialProfileDto {
+  int32 id = 1;
+  repeated UserDto followers = 2;
+  repeated UserDto followed = 3;
+  repeated UserDto followable = 4;
+}
+
+message FollowRequest {
+  int32 follower_id = 1;
+  int32 followed_id = 2;
+}
+
+message FollowResponse {
+  SocialProfileDto social_profile = 1;
+}
+
+message UnFollowRequest {
+  int32 follower_id = 1;
+  int32 unfollowed_id = 2;
+}
+
+message UnFollowResponse {
+  SocialProfileDto social_profile = 1;
+}
+
+message GetSocialProfileRequest {
+  int32 user_id = 1;
+}
+
+message GetSocialProfileResponse {
+  SocialProfileDto social_profile = 1;
+}
+
+message GetRecommendationsRequest {
+  int32 user_id = 1;
+}
+
+message GetRecommendationsResponse {
+  repeated UserDto recommendations = 1;
+}
+

@@ -56,6 +56,7 @@
     <Protobuf Include="Protos\encounters.proto" />
     <Protobuf Include="Protos\tourist-encounters.proto" />
     <Protobuf Include="Protos\encounter-request.proto" />
+    <Protobuf Include="Protos\social-profile.proto" />
   </ItemGroup>
 
 </Project>

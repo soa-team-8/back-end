@@ -1,5 +1,6 @@
 using Explorer.API.Controllers.Author.Administration;
 using Explorer.API.Controllers.Tourist.Encounters;
+using Explorer.API.Controllers.User.SocialProfile;
 using Explorer.API.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +43,7 @@ app.MapControllers();
 app.MapGrpcService<EncounterProtoController>();
 app.MapGrpcService<TouristEncounterProtoController>();
 app.MapGrpcService<EncounterRequestProtoController>();
+app.MapGrpcService<SocialProfileProtoController>();
 
 app.Run();
 
