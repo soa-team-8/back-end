@@ -41,6 +41,7 @@ app.UseStaticFiles();
 app.MapControllers();
 app.MapGrpcService<EncounterProtoController>();
 app.MapGrpcService<TouristEncounterProtoController>();
+app.MapGrpcService<EncounterRequestProtoController>();
 
 app.Run();
 

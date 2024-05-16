@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace Explorer.API.Controllers.Administrator.Administration
 {
-    [Authorize(Policy = "touristAndAdministratorPolicy")]
+    //[Authorize(Policy = "touristAndAdministratorPolicy")]
     [Route("api/administration/encounterRequests")]
     public class EncounterRequestController : BaseApiController
     {
@@ -21,14 +21,14 @@ namespace Explorer.API.Controllers.Administrator.Administration
             _encounterRequestService = encounterRequestService;
         }
 
-        [HttpPost]
+        //[HttpPost]
         public ActionResult<EncounterRequestDto> Create([FromBody] EncounterRequestDto request)
         {
             var result = _encounterRequestService.Create(request);
             return CreateResponse(result);
         }
 
-        [HttpGet]
+        //[HttpGet]
         public async Task<ActionResult<PagedResult<EncounterRequestDto>>> GetAll()
         {
             using HttpResponseMessage response = await Client.GetAsync("http://localhost:3030/requests/getAll");
@@ -36,7 +36,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(jsonResponse.ToResult());
         }
 
-        [HttpPut("accept/{id:int}")]
+        //[HttpPut("accept/{id:int}")]
         public async Task<ActionResult<EncounterRequestDto>> AcceptRequest(int id)
         {
             using HttpResponseMessage response = await Client.PutAsync($"http://localhost:3030/requests/acceptReq/{id}", null);
@@ -44,7 +44,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(jsonResponse.ToResult());
         }
 
-        [HttpPut("reject/{id:int}")]
+        //[HttpPut("reject/{id:int}")]
         public async Task<ActionResult<EncounterRequestDto>> RejectRequest(int id)
         {
             using HttpResponseMessage response = await Client.PutAsync($"http://localhost:3030/requests/rejectReq/{id}", null);
