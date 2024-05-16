@@ -16,8 +16,8 @@ public class CheckpointController : BaseApiController
         _httpClient.BaseAddress = new Uri("http://localhost:3000");
     }
 
-    [HttpPost("create/{status}")]
-    [Authorize(Policy = "authorPolicy")]
+    //[HttpPost("create/{status}")]
+    //[Authorize(Policy = "authorPolicy")]
     public async Task<ActionResult<CheckpointDto>> Create([FromForm] CheckpointDto checkpoint, [FromRoute] string status, [FromForm] List<IFormFile>? pictures = null)
     {
         var formData = new MultipartFormDataContent();

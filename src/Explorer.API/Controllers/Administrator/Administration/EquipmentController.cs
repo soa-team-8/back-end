@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Administrator.Administration;
 
-[Authorize(Policy = "administratorPolicy")]
+//[Authorize(Policy = "administratorPolicy")]
 [Route("api/administration/equipment")]
 public class EquipmentController : BaseApiController
 {
@@ -25,7 +25,7 @@ public class EquipmentController : BaseApiController
         return Ok(content);
     }
 
-    [HttpGet]
+    //[HttpGet]
     public async Task<ActionResult> GetAll()
     {
         var response = await _httpClient.GetAsync("/equipment");
@@ -34,7 +34,7 @@ public class EquipmentController : BaseApiController
         return Ok(content);
     }
 
-    [HttpPost]
+    //[HttpPost]
     public async Task<ActionResult> Create([FromBody] EquipmentDto equipment)
     {
         var response = await _httpClient.PostAsJsonAsync("/equipment", equipment);

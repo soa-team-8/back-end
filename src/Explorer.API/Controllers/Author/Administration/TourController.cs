@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration;
 
-[Authorize(Policy = "authorPolicy")]
+//[Authorize(Policy = "authorPolicy")]
 [Route("api/administration/tour")]
 public class TourController : BaseApiController
 {
@@ -17,7 +17,7 @@ public class TourController : BaseApiController
         _httpClient.BaseAddress = new Uri("http://localhost:3000");
     }
 
-    [HttpPost]
+    //[HttpPost]
     public async Task<ActionResult> Create([FromBody] TourDto tour)
     {
         var response = await _httpClient.PostAsJsonAsync("/tours", tour);
@@ -38,7 +38,7 @@ public class TourController : BaseApiController
         return Ok(content);
     }
 
-    [HttpGet]
+    //[HttpGet]
     public async Task<ActionResult> GetAll()
     {
         var response = await _httpClient.GetAsync("/tours");
@@ -47,7 +47,7 @@ public class TourController : BaseApiController
         return Ok(content);
     }
 
-    [HttpPut("add/{tourId:int}/{equipmentId:int}")]
+    //[HttpPut("add/{tourId:int}/{equipmentId:int}")]
     public async Task<ActionResult> AddEquipment(int tourId, int equipmentId)
     {
         var response = await _httpClient.PutAsync($"/tours/{tourId}/{equipmentId}/add", null);

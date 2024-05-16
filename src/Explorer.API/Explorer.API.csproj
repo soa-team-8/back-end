@@ -52,8 +52,10 @@
   </ItemGroup>  
 
   <ItemGroup>
-    <Folder Include="Protos\" />
+	  <Protobuf Include="Protos\equipment.proto" />
+	  <Protobuf Include="Protos\checkpoint.proto" />
 	  <Protobuf Include="Protos\tours.proto" />
+	  <Protobuf Include="Protos\reporteIssuesReview.proto" />
   </ItemGroup>
 
 </Project>

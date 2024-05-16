@@ -5,8 +5,8 @@ import "Protos/google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 
-service TourService {
-  rpc CreateTour(TourDto) returns (google.protobuf.Empty) {
+service ToursService {
+  rpc CreateTour(TourDto) returns (ActionResponse) {
     option (google.api.http) = {
       post: "/api/administration/tour"
       body: "*"
@@ -19,19 +19,19 @@ service TourService {
     };
   }
 
-  rpc GetAllTours(google.protobuf.Empty) returns (ListTourDtoResponse) {
+  rpc GetAllTours(GetAllToursRequest) returns (ListTourDtoResponse) {
     option (google.api.http) = {
       get: "/api/administration/tour"
     };
   }
 
-  rpc AddEquipment(AddEquipmentRequest) returns (google.protobuf.Empty) {
+  rpc AddEquipment(AddEquipmentRequest) returns (ActionResponse) {
     option (google.api.http) = {
       put: "/api/administration/tour/add/{tour_id}/{equipment_id}"
     };
   }
 
-  rpc RemoveEquipment(RemoveEquipmentRequest) returns (google.protobuf.Empty) {
+  rpc RemoveEquipment(RemoveEquipmentRequest) returns (ActionResponse) {
     option (google.api.http) = {
       put: "/api/administration/tour/remove/{tour_id}/{equipment_id}"
     };
@@ -43,31 +43,33 @@ service TourService {
     };
   }
 
-  rpc DeleteTour(DeleteTourRequest) returns (google.protobuf.Empty) {
+  rpc DeleteTour(DeleteTourRequest) returns (ActionResponse) {
     option (google.api.http) = {
       delete: "/api/administration/tour/{id}"
     };
   }
 
-  rpc PublishTour(PublishTourRequest) returns (google.protobuf.Empty) {
+  rpc PublishTour(PublishTourRequest) returns (ActionResponse) {
     option (google.api.http) = {
       put: "/api/administration/tour/publishedTours/{id}"
     };
   }
 
-  rpc ArchiveTour(ArchiveTourRequest) returns (google.protobuf.Empty) {
+  rpc ArchiveTour(ArchiveTourRequest) returns (ActionResponse) {
     option (google.api.http) = {
       put: "/api/administration/tour/archivedTours/{id}"
     };
   }
 
-  rpc UpdateTour(UpdateTourRequest) returns (google.protobuf.Empty) {
+  rpc UpdateTour(UpdateTourRequest) returns (ActionResponse) {
     option (google.api.http) = {
       put: "/api/administration/tour/{id}"
       body: "*"
     };
   }
 }
+
+message GetAllToursRequest {}
 
 message GetToursByAuthorRequest {
   int32 page = 1;
@@ -107,6 +109,10 @@ message ArchiveTourRequest {
 message UpdateTourRequest {
   int32 id = 1;
   TourDto tour = 2;
+}
+
+message ActionResponse{
+    bool succes = 1;
 }
 
 message TourDto {

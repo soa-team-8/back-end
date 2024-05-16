@@ -1,3 +1,5 @@
+using Explorer.API.Controllers.Administrator.Administration;
+using Explorer.API.Controllers.Author.Administration;
 using Explorer.API.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,10 +11,11 @@ builder.Services.ConfigureCors(corsPolicy);
 builder.Services.ConfigureAuth();
 
 builder.Services.RegisterModules();
+builder.Services.AddGrpc().AddJsonTranscoding();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+/*if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
@@ -22,9 +25,8 @@ else
 {
     app.UseExceptionHandler("/error");
     app.UseHsts();
-}
-
-//app.UseDeveloperExceptionPage();
+}*/
+app.UseDeveloperExceptionPage();
 //app.UseSwagger();
 //app.UseSwaggerUI();
 
@@ -36,6 +38,9 @@ app.UseAuthorization();
 
 app.UseStaticFiles();
 app.MapControllers();
+app.MapGrpcService<TourProtoController>();
+app.MapGrpcService<CheckpointProtoControler>();
+app.MapGrpcService<EquipmentProtoController>();
 
 app.Run();
 
